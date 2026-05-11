@@ -61,6 +61,9 @@ public class ChatData {
 
 	// Фабрики
 	public static ChatData fromEntity(@NotNull Entity entity) {
+		if (entity instanceof LivingEntity livingEntity) {
+			return fromLivingEntity(livingEntity);
+		}
 		return ChatData.builder()
 				.entity(entity)
 				.underwater(entity.isUnderWater())

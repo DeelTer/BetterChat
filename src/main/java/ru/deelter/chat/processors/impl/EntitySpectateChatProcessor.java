@@ -2,7 +2,6 @@ package ru.deelter.chat.processors.impl;
 
 import net.kyori.adventure.audience.Audience;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import ru.deelter.chat.config.ChatConfig;
@@ -34,7 +33,7 @@ public class EntitySpectateChatProcessor extends AbstractChatProcessor {
  			/*
  				Человек может вселиться в овцу и разговаривать от её имени
  			 */
-			ChatData data2 = entity instanceof LivingEntity livingEntity ? ChatData.fromLivingEntity(livingEntity) : ChatData.fromEntity(entity);
+			ChatData data2 = ChatData.fromEntity(entity);
 			data2.setLocale(player.locale());
 			data2.setFormat(ChatConfig.formatSpectatorEntity);
 			data2.setText(data.getText());
