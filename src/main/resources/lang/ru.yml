@@ -1,0 +1,13 @@
+# BetterChat Russian localization
+messages:
+  lang-set: "<color:#FFD700>BetterChat</color> <#C7B9A6>Язык изменён на <lang>."
+  links:
+    open: "Нажмите, чтобы открыть ссылку"
+  chat:
+    copy: "Нажмите, чтобы скопировать"
+    hide: "Нажмите, чтобы показать"
+    command: "Нажмите, чтобы выполнить команду"
+    say: "Нажмите, чтобы сказать"
+  global: "ГЛОБАЛЬНЫЙ"
+  trade: "ОБМЕН"
+  underwater-chat: "*буль-буль*"

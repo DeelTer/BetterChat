@@ -1,0 +1,136 @@
+translation:
+  enabled: true
+
+icons:
+  copy: "📋"
+  hide: "👁️‍🗨️"
+  command: "⚡"
+  link: "🔗"
+
+# Отключение встроенных обработчиков по идентификаторам.
+# Доступные идентификаторы: confusion, underwater, strength, weakness, scale,
+# cave, invisibility, darkness, spectate, tag,
+# url_label, url, copy, hide, command, chat
+#
+# Пример: ["cave", "darkness"] отключит пещерное эхо и эффект темноты.
+disabled-processors: []
+
+chat:
+  formats:
+    default: "<prefix><color1><sender><suffix>:</color1> <color2><message></color2>"
+    cave: "<color:#D0CAA5><sender>:</color> <color:#EFEEE6><message></color>"
+    spectator-inside: "<color:#CBCCD2>[...]:</color> <color:#EFF0F6><message></color>"
+    spectator-entity: "<color:#CBCCD2><sender>:</color> <color:#EFF0F6><message></color>"
+    sculk: "<color:#375e5b><sender>:</color> <color:#688a87><message></color>"
+  colors:
+    default: "#FFD700"
+    default2: "#c7b9a6"
+    spectate: "#CBCCD2"
+    spectate2: "#EFF0F6"
+    underwater: "#6BCCE4"
+    underwater2: "#B4D9E2"
+    invisible: "#D0CAA5"
+    invisible2: "#EFEEE6"
+    darkness: "#654C7D"
+    darkness2: "#A795B9"
+tags:
+  global:
+    symbol: "!"
+    radius: -1
+    format: "<color:#525252><lang:com.chat.global></color> <prefix><color1><sender><suffix>:</color1> <color2><message></color2>"
+  trade:
+    symbol: "$"
+    radius: -1
+    format: "<color:#9DFF00><lang:com.chat.trade></color> <prefix><color1><sender><suffix>:</color1> <color2><message></color2>"
+
+links:
+  yandex:
+    color: "#f93b01"
+    color2: "#ffffff"
+    urls:
+      - "yandex.ru"
+      - "yandex.com"
+  google:
+    color: "#6485ff"
+    color2: "#ffffff"
+    urls:
+      - "google.ru"
+      - "google.com"
+  youtube:
+    color: "#ed3939"
+    color2: "#ebebeb"
+    urls:
+      - "youtube.com"
+      - "youtu.be.com"
+  tiktok:
+    color: "#1ec5e9"
+    color2: "#e60951"
+    urls:
+      - "tiktok.com"
+  vk:
+    color: "#688cff"
+    color2: "#7eacff"
+    urls:
+      - "vk.com"
+  discord:
+    color: "#7e73fd"
+    color2: "#8a92ff"
+    urls:
+      - "discord.com"
+      - "discord.gg"
+      - "discord.io"
+  twitch:
+    color: "#7960f5"
+    color2: "#a285ff"
+    urls:
+      - "twitch.tv"
+      - "twitch.com"
+  twitter:
+    color: "#61d1ff"
+    color2: "#9fe3ff"
+    urls:
+      - "twitter.com"
+  github:
+    color: "#515151"
+    color2: "#848484"
+    urls:
+      - "github.com"
+  spigot:
+    color: "#f3be2e"
+    color2: "#ffe56a"
+    urls:
+      - "spigotmc.org"
+  pornhub:
+    color: "#f0972e"
+    color2: "#848484"
+    urls:
+      - "pornhub.com"
+  instagram:
+    color: "#f8db1d"
+    color2: "#eb16b1"
+    urls:
+      - "instagram.com"
+  minecraft:
+    color: "#b6845a"
+    color2: "#97c868"
+    urls:
+      - "minecraft.net"
+      - "minecraft.com"
+  stackoverflow:
+    color: "#fa8e32"
+    color2: "#e7e7e7"
+    urls:
+      - "stackoverflow.com"
+  modrinth:
+    color: "#1BC161"
+    color2: "#FFFFFF"
+    "urls":
+      - "modrinth.com"
+      - "modrinth.net"
+  telegram:
+    color: "#269DD9"
+    color2: "#242F3D"
+    "urls":
+      - "t.me"
+      - "telegram.org"
+      - "web.telegram.org"
