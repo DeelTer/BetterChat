@@ -10,6 +10,7 @@ import ru.deelter.chat.bubbles.BubbleManager;
 import ru.deelter.chat.commands.ChatCommand;
 import ru.deelter.chat.commands.LangCommand;
 import ru.deelter.chat.config.*;
+import ru.deelter.chat.listeners.AntiSpamAuthListener;
 import ru.deelter.chat.listeners.GlobalMessageListener;
 import ru.deelter.chat.listeners.PlayerMessageListener;
 import ru.deelter.chat.processors.ChatProcessorRegistry;
@@ -54,6 +55,7 @@ public final class BetterChat extends JavaPlugin {
 
 		Bukkit.getPluginManager().registerEvents(new PlayerMessageListener(), this);
 		Bukkit.getPluginManager().registerEvents(new BubbleChatListener(), this);
+		Bukkit.getPluginManager().registerEvents(new AntiSpamAuthListener(), this);
 
 		PluginCommand langCmd = getCommand("lang");
 		if (langCmd != null) {
