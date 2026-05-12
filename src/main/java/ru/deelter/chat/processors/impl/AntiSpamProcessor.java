@@ -18,28 +18,28 @@ public class AntiSpamProcessor extends AbstractChatProcessor {
 
 	@Override
 	public void process(@NotNull ChatData data) {
-		if (!(data.getEntity() instanceof Player player)) return;
-		if (player.hasPermission("betterchat.antispam.bypass")) return;
-		if (data.getAudiences().isEmpty()) return; // тишина – не наказываем
-
+		Player player = (Player) data.getEntity();
 		String text = PlainTextComponentSerializer.plainText().serialize(data.getText());
 
 		if (SpamGuard.isSimilar(player, text,
 				AntiSpamConfig.getSimilarityThreshold(),
 				AntiSpamConfig.getRecentMessagesCount())) {
 
-			Component blockMsg = BetterChat.getInstance().getLang().getMessage("anti-spam.blocked", player);
-			if (blockMsg != null) {
-				player.sendActionBar(blockMsg);
+			Component spamBlockedMessage = BetterChat.getInstance().getLang()
+					.getMessage("anti-spam.blocked", player);
+			if (spamBlockedMessage != null) {
+				player.sendActionBar(spamBlockedMessage);
 			}
-
 			data.getAudiences().clear();
-			setTerminateChain(true); // прерываем цепочку
+			setTerminateChain(true);
 		}
 	}
 
 	@Override
 	public boolean canProcess(@NotNull ChatData data) {
-		return AntiSpamConfig.isEnabled();
+		if (!AntiSpamConfig.isEnabled()) return false;
+		if (data.getAudiences().isEmpty()) return false;
+		if (!(data.getEntity() instanceof Player player)) return false;
+		return !player.hasPermission("betterchat.antispam.bypass");
 	}
 }
