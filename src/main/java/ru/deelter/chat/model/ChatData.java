@@ -1,4 +1,4 @@
-package ru.deelter.chat.utils;
+package ru.deelter.chat.model;
 
 import io.papermc.paper.event.player.AsyncChatEvent;
 import lombok.*;
@@ -19,6 +19,9 @@ import ru.deelter.chat.BetterChat;
 import ru.deelter.chat.bubbles.BubbleManager;
 import ru.deelter.chat.config.ChatConfig;
 import ru.deelter.chat.processors.AbstractChatProcessor;
+import ru.deelter.chat.utils.ChatUtils;
+import ru.deelter.chat.utils.LocationUtils;
+import ru.deelter.chat.utils.PlayerLanguageUtil;
 
 import java.util.*;
 
@@ -29,9 +32,6 @@ import java.util.*;
 @AllArgsConstructor
 public class ChatData {
 
-	public static final double CAVE_RADIUS = 300.0;
-	public static final double DEFAULT_RADIUS = 40.0;
-
 	private String format; // без @Builder.Default, задаётся в фабриках
 	@Builder.Default
 	private Component text = Component.text("text");
@@ -40,7 +40,7 @@ public class ChatData {
 	private Entity entity;
 	private Location location;
 	@Builder.Default
-	private double radius = DEFAULT_RADIUS;
+	private double radius = ChatConfig.defaultRadius;
 	private boolean darkness;
 	private boolean invisible;
 	private boolean underwater;

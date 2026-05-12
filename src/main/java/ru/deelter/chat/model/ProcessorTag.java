@@ -1,4 +1,4 @@
-package ru.deelter.chat.processors;
+package ru.deelter.chat.model;
 
 public record ProcessorTag(String id) {
 

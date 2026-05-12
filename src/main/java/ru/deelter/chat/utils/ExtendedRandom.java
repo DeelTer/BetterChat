@@ -28,7 +28,7 @@ public class ExtendedRandom extends Random {
 	}
 
 	public double getDouble(double min, double max) {
-		return min + (1 + max - min) * this.nextDouble();
+		return min + (max - min) * nextDouble();
 	}
 
 	public long getLong(long min, long max) {

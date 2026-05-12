@@ -1,27 +1,101 @@
+# =================================================================
+#  BetterChat Configuration
+# =================================================================
+#  Flexible chat system with modifiers, bubbles and auto-translation.
+#
+#  MiniMessage format tester: https://webui.advntr.dev/
+#  Plugin website: https://deelter.ru
+#
+#  Permissions:
+#    betterchat.use     - Allows using chat with all modifiers
+#                          (default: true for all players)
+#
+#  Commands:
+#    /chat <text>        - Send a chat message with tag support
+#    /lang <code>        - Set your preferred chat language
+#
+#  Mechanics:
+#    - Chat formatting changes based on player state (underwater, darkness, etc.)
+#    - Auto-translation between players with different languages
+#    - Chat bubbles (TextDisplay entities above players)
+#    - Custom tags (!global, $trade) with configurable radius and format
+#    - Inline replacements: [copy:text], [hide:secret], [cmd:/command], [link:label:url]
+#    - Automatic URL detection with service-specific icons
+# =================================================================
+
+# Language & translation settings
+language:
+  # Default language for the server (used when auto-detect is off)
+  # Available: en, ru, uk, de, es, fr, zh (add your own .yml in lang/ folder)
+  default: "en"
+  # Automatically use player's client locale for plugin messages
+  auto-detect: true
+
 translation:
+  # Enable automatic chat translation between players with different languages
+  # Translated messages show original text on hover
   enabled: true
 
-icons:
-  copy: "📋"
-  hide: "👁️‍🗨️"
-  command: "⚡"
-  link: "🔗"
+# bStats metrics collection
+metrics:
+  # Send anonymous usage statistics to bstats.org
+  # Disable if you prefer not to share data
+  enabled: true
 
-# Отключение встроенных обработчиков по идентификаторам.
-# Доступные идентификаторы: confusion, underwater, strength, weakness, scale,
+# Chat bubble display icons
+# You can use any Unicode/emoji characters supported by Minecraft
+icons:
+  copy: "📋"      # Copy to clipboard button
+  hide: "👁️‍"   # Hidden text reveal button
+  command: "⚡"    # Command execution button
+  link: "🔗"       # URL link indicator
+
+# Disable specific built-in processors by their IDs
+# Available IDs: confusion, underwater, strength, weakness, scale,
 # cave, invisibility, darkness, spectate, tag,
 # url_label, url, copy, hide, command, chat
 #
-# Пример: ["cave", "darkness"] отключит пещерное эхо и эффект темноты.
-disabled-processors: []
+# Example: ["cave", "darkness"] disables cave echo and darkness effect
+disabled-processors: [ ]
 
+# Chat bubble appearance settings
+bubbles:
+  queue-tick-interval: 3
+  # Default text width in pixels (prevents overly wide bubbles)
+  default-width: 200
+  # Minimum display time in ticks (20 ticks = 1 second)
+  min-ticks: 40
+  # Vertical offset above the entity (in blocks)
+  offset-y: 0.25
+  # Billboard type: FIXED, VERTICAL, HORIZONTAL, CENTER
+  # CENTER - always faces the viewer (most readable)
+  billboard: "CENTER"
+  # Text shadow for better readability
+  shadow: false
+  # See-through when behind blocks
+  see-through: false
+  # Default background rectangle behind text
+  default-background: false
+  # Pop-up animation when bubble appears
+  min-tps-for-animation: 18.0
+  min-tps-for-bubbles: 14.0
+  animation:
+    pop-up:
+      enabled: true
+      start-scale: 0.015      # Initial tiny size (20% of normal)
+      duration-ticks: 3     # Animation duration (20 ticks = 1 second)
+
+# Chat format and color settings
 chat:
+  # Message format templates
+  # Available placeholders: <prefix>, <suffix>, <sender>, <message>, <color1>, <color2>
   formats:
     default: "<prefix><color1><sender><suffix>:</color1> <color2><message></color2>"
     cave: "<color:#D0CAA5><sender>:</color> <color:#EFEEE6><message></color>"
     spectator-inside: "<color:#CBCCD2>[...]:</color> <color:#EFF0F6><message></color>"
     spectator-entity: "<color:#CBCCD2><sender>:</color> <color:#EFF0F6><message></color>"
     sculk: "<color:#375e5b><sender>:</color> <color:#688a87><message></color>"
+  # Color presets used by chat processors
   colors:
     default: "#FFD700"
     default2: "#c7b9a6"
@@ -33,104 +107,214 @@ chat:
     invisible2: "#EFEEE6"
     darkness: "#654C7D"
     darkness2: "#A795B9"
+
+# Chat tags - prefix symbols that modify message radius and format
 tags:
   global:
     symbol: "!"
-    radius: -1
-    format: "<color:#525252><lang:com.chat.global></color> <prefix><color1><sender><suffix>:</color1> <color2><message></color2>"
+    radius: -1          # -1 = unlimited radius (global message)
+    format: "<color:#525252>[G]</color> <prefix><color1><sender><suffix>:</color1> <color2><message></color2>"
   trade:
     symbol: "$"
-    radius: -1
-    format: "<color:#9DFF00><lang:com.chat.trade></color> <prefix><color1><sender><suffix>:</color1> <color2><message></color2>"
+    radius: -1          # -1 = unlimited radius
+    format: "<color:#9DFF00>$</color> <prefix><color1><sender><suffix>:</color1> <color2><message></color2>"
+  server:
+    symbol: ""
+    radius: -1          # -1 = unlimited radius
+    format: "<color:#9DFF00>$</color> <prefix><color1><sender><suffix>:</color1> <color2><message></color2>"
 
+mentions:
+  enabled: true
+  color: "#FFD700"
+  sound: "block.note_block.bell"
+  bypass-permission: "betterchat.mention.bypass"
+
+anti-spam:
+  enabled: true
+  similarity-threshold: 0.9   # 0.0 – 1.0 (0-100%)
+  recent-messages-count: 5
+
+# Link detection - services get custom colors and icons
 links:
-  yandex:
-    color: "#f93b01"
-    color2: "#ffffff"
-    urls:
-      - "yandex.ru"
-      - "yandex.com"
-  google:
-    color: "#6485ff"
-    color2: "#ffffff"
-    urls:
-      - "google.ru"
-      - "google.com"
-  youtube:
-    color: "#ed3939"
-    color2: "#ebebeb"
-    urls:
-      - "youtube.com"
-      - "youtu.be.com"
-  tiktok:
-    color: "#1ec5e9"
-    color2: "#e60951"
-    urls:
-      - "tiktok.com"
+  # === CIS / Post-Soviet services ===
   vk:
-    color: "#688cff"
-    color2: "#7eacff"
+    color: "#0077FF"
+    color2: "#FFFFFF"
     urls:
       - "vk.com"
-  discord:
-    color: "#7e73fd"
-    color2: "#8a92ff"
-    urls:
-      - "discord.com"
-      - "discord.gg"
-      - "discord.io"
-  twitch:
-    color: "#7960f5"
-    color2: "#a285ff"
-    urls:
-      - "twitch.tv"
-      - "twitch.com"
-  twitter:
-    color: "#61d1ff"
-    color2: "#9fe3ff"
-    urls:
-      - "twitter.com"
-  github:
-    color: "#515151"
-    color2: "#848484"
-    urls:
-      - "github.com"
-  spigot:
-    color: "#f3be2e"
-    color2: "#ffe56a"
-    urls:
-      - "spigotmc.org"
-  pornhub:
-    color: "#f0972e"
-    color2: "#848484"
-    urls:
-      - "pornhub.com"
-  instagram:
-    color: "#f8db1d"
-    color2: "#eb16b1"
-    urls:
-      - "instagram.com"
-  minecraft:
-    color: "#b6845a"
-    color2: "#97c868"
-    urls:
-      - "minecraft.net"
-      - "minecraft.com"
-  stackoverflow:
-    color: "#fa8e32"
-    color2: "#e7e7e7"
-    urls:
-      - "stackoverflow.com"
-  modrinth:
-    color: "#1BC161"
-    color2: "#FFFFFF"
-    "urls":
-      - "modrinth.com"
-      - "modrinth.net"
+      - "vk.ru"
+      - "vkontakte.ru"
+      - "vk.cc"
   telegram:
-    color: "#269DD9"
-    color2: "#242F3D"
-    "urls":
+    color: "#26A5E4"
+    color2: "#FFFFFF"
+    urls:
       - "t.me"
       - "telegram.org"
       - "web.telegram.org"
+      - "telegram.me"
+  yandex:
+    color: "#FC3F1D"
+    color2: "#FFFFFF"
+    urls:
+      - "yandex.ru"
+      - "yandex.com"
+      - "ya.ru"
+  mailru:
+    color: "#005FF9"
+    color2: "#FFFFFF"
+    urls:
+      - "mail.ru"
+      - "my.mail.ru"
+      - "cloud.mail.ru"
+  rutube:
+    color: "#000000"
+    color2: "#00FF88"
+    urls:
+      - "rutube.ru"
+  dzen:
+    color: "#2C2D2E"
+    color2: "#FFFFFF"
+    urls:
+      - "dzen.ru"
+      - "zen.yandex.ru"
+  habr:
+    color: "#77A2B5"
+    color2: "#FFFFFF"
+    urls:
+      - "habr.com"
+      - "habrahabr.ru"
+  ozon:
+    color: "#005BFF"
+    color2: "#FFFFFF"
+    urls:
+      - "ozon.ru"
+  wildberries:
+    color: "#9F1E6E"
+    color2: "#FFFFFF"
+    urls:
+      - "wildberries.ru"
+      - "wildberries.by"
+      - "wildberries.kz"
+
+  # === International services ===
+  google:
+    color: "#4285F4"
+    color2: "#FFFFFF"
+    urls:
+      - "google.com"
+      - "google.ru"
+      - "goo.gl"
+  youtube:
+    color: "#FF0000"
+    color2: "#FFFFFF"
+    urls:
+      - "youtube.com"
+      - "youtu.be"
+  tiktok:
+    color: "#000000"
+    color2: "#FE2C55"
+    urls:
+      - "tiktok.com"
+      - "vm.tiktok.com"
+  discord:
+    color: "#5865F2"
+    color2: "#FFFFFF"
+    urls:
+      - "discord.com"
+      - "discord.gg"
+      - "discordapp.com"
+  twitch:
+    color: "#9146FF"
+    color2: "#FFFFFF"
+    urls:
+      - "twitch.tv"
+  twitter:
+    color: "#000000"
+    color2: "#FFFFFF"
+    urls:
+      - "x.com"
+      - "twitter.com"
+      - "t.co"
+  instagram:
+    color: "#E1306C"
+    color2: "#FFFFFF"
+    urls:
+      - "instagram.com"
+      - "instagr.am"
+  github:
+    color: "#24292E"
+    color2: "#FFFFFF"
+    urls:
+      - "github.com"
+      - "github.io"
+      - "gist.github.com"
+  gitlab:
+    color: "#FC6D26"
+    color2: "#FFFFFF"
+    urls:
+      - "gitlab.com"
+  minecraft:
+    color: "#B17F59"
+    color2: "#C7F9A8"
+    urls:
+      - "minecraft.net"
+      - "minecraft.com"
+      - "mcpedl.com"
+  modrinth:
+    color: "#1BD96A"
+    color2: "#FFFFFF"
+    urls:
+      - "modrinth.com"
+  curseforge:
+    color: "#F16436"
+    color2: "#FFFFFF"
+    urls:
+      - "curseforge.com"
+      - "curse.com"
+  stackoverflow:
+    color: "#F48225"
+    color2: "#FFFFFF"
+    urls:
+      - "stackoverflow.com"
+  spotify:
+    color: "#1DB954"
+    color2: "#191414"
+    urls:
+      - "spotify.com"
+      - "open.spotify.com"
+  netflix:
+    color: "#E50914"
+    color2: "#000000"
+    urls:
+      - "netflix.com"
+  steam:
+    color: "#171A21"
+    color2: "#66C0F4"
+    urls:
+      - "steampowered.com"
+      - "steamcommunity.com"
+      - "store.steampowered.com"
+  epicgames:
+    color: "#121212"
+    color2: "#FFFFFF"
+    urls:
+      - "epicgames.com"
+      - "epic.gm"
+  reddit:
+    color: "#FF4500"
+    color2: "#FFFFFF"
+    urls:
+      - "reddit.com"
+      - "redd.it"
+  wikipedia:
+    color: "#000000"
+    color2: "#FFFFFF"
+    urls:
+      - "wikipedia.org"
+      - "wiki.phtml"
+  twitch-clips:
+    color: "#9146FF"
+    color2: "#000000"
+    urls:
+      - "clips.twitch.tv"

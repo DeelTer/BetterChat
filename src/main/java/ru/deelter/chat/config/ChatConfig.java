@@ -17,8 +17,13 @@ public final class ChatConfig {
 			colorUnderwater, colorUnderwater2, colorInvisible, colorInvisible2,
 			colorDarkness, colorDarkness2;
 
+	public static double defaultRadius, caveRadius;
+
 	public static void init(FileConfiguration configuration) {
 		config = configuration;
+
+		defaultRadius = config.getDouble("chat.default-radius", 50.0);
+		caveRadius = config.getDouble("chat.cave-radius", 256.0);
 
 		formatDefault = getString("chat.formats.default", "<prefix><color1><sender><suffix>:</color1> <color2><message></color2>");
 		formatCave = getString("chat.formats.cave", "<color:#D0CAA5><sender>:</color> <color:#EFEEE6><message></color>");
@@ -42,7 +47,7 @@ public final class ChatConfig {
 		return config.getString(path, def);
 	}
 
-	private static TextColor getColor(String path, String defHex) {
+	public static TextColor getColor(String path, String defHex) {
 		String hex = config.getString(path, defHex);
 		if (!hex.startsWith("#")) hex = "#" + hex;
 		return Objects.requireNonNull(TextColor.fromHexString(hex), "Invalid color at " + path);

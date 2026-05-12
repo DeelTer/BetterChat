@@ -1,13 +1,13 @@
 # BetterChat Russian localization
 messages:
   lang-set: "<color:#FFD700>BetterChat</color> <#C7B9A6>Язык изменён на <lang>."
-  links:
-    open: "Нажмите, чтобы открыть ссылку"
-  chat:
-    copy: "Нажмите, чтобы скопировать"
-    hide: "Нажмите, чтобы показать"
-    command: "Нажмите, чтобы выполнить команду"
-    say: "Нажмите, чтобы сказать"
+  links-open: "Нажмите, чтобы открыть ссылку"
+  chat-copy: "Нажмите, чтобы скопировать"
+  chat-hide: "Нажмите, чтобы показать"
+  chat-command: "Нажмите, чтобы выполнить команду"
+  chat-say: "Нажмите, чтобы сказать"
+  empty-audience: "<red>Никто не услышал ваше сообщение"
+  anti-spam-blocked: "<red>Слишком похоже на предыдущее сообщение"
   global: "ГЛОБАЛЬНЫЙ"
   trade: "ОБМЕН"
   underwater-chat: "*буль-буль*"

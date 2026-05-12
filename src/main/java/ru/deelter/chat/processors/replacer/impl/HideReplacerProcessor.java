@@ -8,7 +8,8 @@ import net.kyori.adventure.text.event.HoverEvent;
 import org.jetbrains.annotations.NotNull;
 import ru.deelter.chat.BetterChat;
 import ru.deelter.chat.config.IconProvider;
-import ru.deelter.chat.utils.ChatData;
+import ru.deelter.chat.processors.replacer.AbstractReplacerProcessor;
+import ru.deelter.chat.model.ChatData;
 import ru.deelter.chat.utils.Lang;
 
 import java.util.regex.Pattern;
@@ -29,12 +30,17 @@ public class HideReplacerProcessor extends AbstractReplacerProcessor {
 					String originalText = result.group(2);
 					Component icon = IconProvider.getIcon("hide");
 					Lang lang = BetterChat.getInstance().getLang();
-					String hoverHide = lang.getMessage("chat.hide", null) != null ?
-							lang.getMessage("chat.hide", null).toString() : "Click to reveal";
+					Component hoverHide = lang.getMessage("chat-hide", null);
+					if (hoverHide == null) {
+						hoverHide = Component.text("Click to reveal");
+					}
 					return Component.join(JoinConfiguration.builder().separator(Component.text(" ")),
 							icon,
 							builder.content("[...]")
-									.hoverEvent(HoverEvent.showText(Component.text(originalText)))
+									.hoverEvent(HoverEvent.showText(
+											Component.join(JoinConfiguration.separator(Component.text(" ")),
+													hoverHide,
+													Component.text(originalText))))
 									.clickEvent(ClickEvent.copyToClipboard(originalText))
 									.build()
 					);

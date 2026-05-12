@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import ru.deelter.chat.BetterChat;
 import ru.deelter.chat.config.ChatConfig;
 import ru.deelter.chat.processors.AbstractChatProcessor;
-import ru.deelter.chat.utils.ChatData;
+import ru.deelter.chat.model.ChatData;
 
 public class EntityUnderwaterChatProcessor extends AbstractChatProcessor {
 
@@ -19,7 +19,7 @@ public class EntityUnderwaterChatProcessor extends AbstractChatProcessor {
 	@Override
 	public void process(@NotNull ChatData data) {
 
-		Component message = BetterChat.getInstance().getLang().getMessage("underwater-message", data.getEntity());
+		Component message = BetterChat.getInstance().getLang().getMessage("underwater-chat", null);
 		if (message != null) {
 			data.setText(message);
 		}

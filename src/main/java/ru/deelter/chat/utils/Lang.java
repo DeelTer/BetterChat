@@ -1,5 +1,6 @@
 package ru.deelter.chat.utils;
 
+import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
@@ -16,6 +17,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+@Getter
 public class Lang {
 
 	private final BetterChat plugin;
@@ -23,6 +25,7 @@ public class Lang {
 	private final MiniMessage miniMessage = MiniMessage.miniMessage();
 	private String defaultLanguage;
 	private boolean autoDetect;
+	private boolean translationEnabled;
 
 	public Lang(BetterChat plugin) {
 		this.plugin = plugin;
@@ -31,16 +34,15 @@ public class Lang {
 
 	public void reload() {
 		languageMessages.clear();
-		// Use config values or defaults
 		defaultLanguage = plugin.getConfig().getString("language.default", "en");
 		autoDetect = plugin.getConfig().getBoolean("language.auto-detect", true);
+		translationEnabled = plugin.getConfig().getBoolean("language.translation", true);
 
 		File langFolder = new File(plugin.getDataFolder(), "lang");
 		if (!langFolder.exists()) {
 			langFolder.mkdirs();
 		}
 
-		// Copy built-in language files
 		String[] resourceFiles = {"lang/en.yml", "lang/ru.yml"};
 		for (String resourcePath : resourceFiles) {
 			File target = new File(plugin.getDataFolder(), resourcePath);
@@ -66,13 +68,13 @@ public class Lang {
 	}
 
 	@Nullable
-	public Component getMessage(String key, @NotNull CommandSender sender) {
+	public Component getMessage(String key, @Nullable CommandSender sender) {
 		return getMessage(key, sender, TagResolver.empty());
 	}
 
 	@Nullable
 	public Component getMessage(String key, CommandSender sender, TagResolver... resolvers) {
-		Player player = sender instanceof Player playerSender ? playerSender : null;
+		Player player = (sender instanceof Player playerSender) ? playerSender : null;
 		String raw = resolveRawMessage(key, player);
 		if (raw == null || raw.isEmpty()) {
 			return null;

@@ -3,12 +3,13 @@ package ru.deelter.chat;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import ru.deelter.chat.bubbles.BubbleChatListener;
 import ru.deelter.chat.bubbles.BubbleManager;
+import ru.deelter.chat.commands.ChatCommand;
 import ru.deelter.chat.commands.LangCommand;
-import ru.deelter.chat.config.ChatConfig;
-import ru.deelter.chat.config.IconProvider;
+import ru.deelter.chat.config.*;
 import ru.deelter.chat.listeners.PlayerTextListener;
 import ru.deelter.chat.managers.ChatProcessorRegistry;
 import ru.deelter.chat.processors.replacer.ChatLink;
@@ -31,15 +32,19 @@ public final class BetterChat extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		saveDefaultConfig();
+		reloadConfig();
 
+		FileConfiguration config = getConfig();
+		ChatConfig.init(config);
+		IconProvider.init(config);
+		BubbleConfig.init(config);
+		MentionConfig.init(config);
+		AntiSpamConfig.init(config);
 
+		ChatLink.load(config);
+		ChatTagRegistry.init();
 		lang = new Lang(this);
 		manager.load();
-
-		ChatConfig.init(getConfig());
-		IconProvider.init(getConfig());
-		ChatLink.load(getConfig());
-		ChatTagRegistry.init();
 
 		Bukkit.getPluginManager().registerEvents(new PlayerTextListener(), this);
 		Bukkit.getPluginManager().registerEvents(new BubbleChatListener(), this);
@@ -52,6 +57,11 @@ public final class BetterChat extends JavaPlugin {
 			langCmd.setExecutor(executor);
 			langCmd.setTabCompleter(executor);
 		}
+		PluginCommand chatCmd = getCommand("chat");
+		if (chatCmd != null) {
+			chatCmd.setExecutor(new ChatCommand());
+		}
+		MetricsSetup.init(this);
 	}
 
 	@Override
@@ -61,9 +71,10 @@ public final class BetterChat extends JavaPlugin {
 
 	public void reload() {
 		this.reloadConfig();
-		ChatConfig.init(getConfig());
-		IconProvider.init(getConfig());
-		ChatLink.reload(this.getConfig());
+		FileConfiguration config = getConfig();
+		ChatConfig.init(config);
+		IconProvider.init(config);
+		ChatLink.reload(config);
 		lang.reload();
 	}
 }

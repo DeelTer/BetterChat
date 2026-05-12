@@ -16,7 +16,11 @@ import java.util.List;
 public class LangCommand implements CommandExecutor, TabCompleter {
 
 	private static final List<String> POPULAR_LANGUAGES = List.of(
-			"en", "ru", "de", "fr", "es", "pt", "it", "zh", "ja", "ko", "ar", "hi", "tr", "uk", "pl"
+			"en", "ru", "de", "fr", "es", "pt", "it", "zh", "ja", "ko",
+			"ar", "hi", "tr", "uk", "pl", "nl", "sv", "no", "da", "fi",
+			"cs", "sk", "hu", "ro", "bg", "el", "he", "th", "vi", "id",
+			"ms", "bn", "ur", "fa", "sw", "zu", "xh", "af", "is", "lt",
+			"lv", "et", "sq", "hr", "sr", "mk", "sl", "bs", "cy", "ga"
 	);
 
 	@Override
@@ -32,6 +36,7 @@ public class LangCommand implements CommandExecutor, TabCompleter {
 		}
 		String code = args[0].toLowerCase();
 		PlayerLanguageUtil.setLocale(player, code);
+
 		Component message = BetterChat.getInstance().getLang().getMessage("lang-set", player, "lang", code);
 		if (message != null) {
 			player.sendMessage(message);

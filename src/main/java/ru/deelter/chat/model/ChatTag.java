@@ -1,4 +1,4 @@
-package ru.deelter.chat.utils.tags;
+package ru.deelter.chat.model;
 
 import lombok.Builder;
 import lombok.Data;

@@ -5,7 +5,7 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.jetbrains.annotations.NotNull;
 import ru.deelter.chat.processors.AbstractChatProcessor;
-import ru.deelter.chat.utils.ChatData;
+import ru.deelter.chat.model.ChatData;
 
 public class EntityScaleChatProcessor extends AbstractChatProcessor {
 

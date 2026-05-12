@@ -7,8 +7,9 @@ import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import org.jetbrains.annotations.NotNull;
 import ru.deelter.chat.BetterChat;
+import ru.deelter.chat.processors.replacer.AbstractReplacerProcessor;
 import ru.deelter.chat.processors.replacer.ChatLink;
-import ru.deelter.chat.utils.ChatData;
+import ru.deelter.chat.model.ChatData;
 
 import java.util.regex.Pattern;
 
@@ -28,16 +29,15 @@ public class URLLabelReplacerProcessor extends AbstractReplacerProcessor {
 					String label = result.group(2);
 					String url = result.group(3);
 					ChatLink link = ChatLink.getLinkByUrl(url);
-					String hoverText = BetterChat.getInstance().getLang()
-							.getMessage("links.open", null) != null ?
-							BetterChat.getInstance().getLang().getMessage("links.open", null).toString() :
-							"Click to open link";
+					Component hoverOpen = BetterChat.getInstance().getLang()
+							.getMessage("links-open", null);
+					if (hoverOpen == null) hoverOpen = Component.text("Click to open link");
 					return builder.content(label)
 							.hoverEvent(HoverEvent.showText(Component.join(JoinConfiguration.noSeparators(),
 									Component.text(url),
 									Component.newline(),
 									Component.newline(),
-									Component.text(hoverText))))
+									hoverOpen)))
 							.clickEvent(ClickEvent.openUrl(url.startsWith("http") ? url : "https://" + url))
 							.color(link.color());
 				}).build();

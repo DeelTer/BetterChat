@@ -8,8 +8,9 @@ import net.kyori.adventure.text.event.HoverEvent;
 import org.jetbrains.annotations.NotNull;
 import ru.deelter.chat.BetterChat;
 import ru.deelter.chat.config.IconProvider;
+import ru.deelter.chat.processors.replacer.AbstractReplacerProcessor;
 import ru.deelter.chat.processors.replacer.ChatLink;
-import ru.deelter.chat.utils.ChatData;
+import ru.deelter.chat.model.ChatData;
 
 import java.util.regex.Pattern;
 
@@ -32,17 +33,16 @@ public class URLReplacerProcessor extends AbstractReplacerProcessor {
 					String shortenUrl = result.group(2);
 					ChatLink link = ChatLink.getLinkByUrl(shortenUrl);
 					Component icon = IconProvider.getIcon("link");
-					String hoverText = BetterChat.getInstance().getLang()
-							.getMessage("links.open", null) != null ?
-							BetterChat.getInstance().getLang().getMessage("links.open", null).toString() :
-							"Click to open link";
+					Component hoverOpen = BetterChat.getInstance().getLang()
+							.getMessage("links-open", null);
+					if (hoverOpen == null) hoverOpen = Component.text("Click to open link");
 					return icon.append(Component.space())
 							.append(builder.content(shortenUrl)
 									.hoverEvent(HoverEvent.showText(Component.join(JoinConfiguration.noSeparators(),
 											Component.text(url),
 											Component.newline(),
 											Component.newline(),
-											Component.text(hoverText))))
+											hoverOpen)))
 									.clickEvent(ClickEvent.openUrl(url.startsWith("http") ? url : "https://" + url))
 									.color(link.color())
 									.build());

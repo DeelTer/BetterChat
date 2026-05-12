@@ -8,7 +8,8 @@ import net.kyori.adventure.text.event.HoverEvent;
 import org.jetbrains.annotations.NotNull;
 import ru.deelter.chat.BetterChat;
 import ru.deelter.chat.config.IconProvider;
-import ru.deelter.chat.utils.ChatData;
+import ru.deelter.chat.processors.replacer.AbstractReplacerProcessor;
+import ru.deelter.chat.model.ChatData;
 import ru.deelter.chat.utils.Lang;
 
 import java.util.regex.Pattern;
@@ -31,15 +32,15 @@ public class CommandReplacerProcessor extends AbstractReplacerProcessor {
 					if (label == null) label = command;
 					Component icon = IconProvider.getIcon("command");
 					Lang lang = BetterChat.getInstance().getLang();
-					String hoverCmd = lang.getMessage("chat.command", null) != null ?
-							lang.getMessage("chat.command", null).toString() : "Click to run command";
+					Component hoverCmd = lang.getMessage("chat-command", null);
+					if (hoverCmd == null) hoverCmd = Component.text("Click to run command");
 					return Component.join(JoinConfiguration.builder().separator(Component.text(" ")),
 							icon,
 							builder.content(label)
 									.hoverEvent(HoverEvent.showText(
 											Component.join(JoinConfiguration.separator(Component.text(" ")),
 													icon,
-													Component.text(hoverCmd),
+													hoverCmd,
 													Component.text("/" + command))))
 									.clickEvent(ClickEvent.runCommand("/" + command))
 									.build()

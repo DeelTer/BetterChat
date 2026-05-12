@@ -6,16 +6,20 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import ru.deelter.chat.BetterChat;
+import ru.deelter.chat.config.BubbleConfig;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class BubbleManager {
 
-	public static final Map<UUID, BubbleQueue> QUEUE = new HashMap<>();
+	public static final Map<UUID, BubbleQueue> QUEUE = new ConcurrentHashMap<>();
 
 	public static void sendBubble(@NotNull Entity entity, @NotNull Component content, int ticks, int width) {
+		if (Bukkit.getTPS()[0] < BubbleConfig.getMinTpsForBubbles()) return;
+
 		Bubble bubble = new Bubble(entity, content, ticks);
 		bubble.setWidth(width);
 		bubble.queue();
@@ -44,7 +48,7 @@ public class BubbleManager {
 				queue.showNext();
 				return true;
 			});
-		}, 0, 10L);
+		}, 0, BubbleConfig.getQueueTickInterval());
 	}
 
 	public static void invalidateBubbles() {

@@ -10,6 +10,7 @@ import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import ru.deelter.chat.BetterChat;
+import ru.deelter.chat.model.ChatData;
 import ru.deelter.chat.utils.translator.OnlineTranslator;
 import ru.deelter.chat.utils.translator.TranslationLanguage;
 
@@ -17,8 +18,6 @@ import java.util.Locale;
 
 @UtilityClass
 public class ChatUtils {
-
-	// Убраны все константы, кроме утилитных методов.
 
 	public static @NotNull String applyConfusedFormat(@NotNull String s) {
 		ExtendedRandom random = ExtendedRandom.getInstance();
@@ -49,29 +48,17 @@ public class ChatUtils {
 				);
 	}
 
-	public static @NotNull Component render(@NotNull ChatData data, @NotNull Player player,
-	                                        @NotNull Component displayName, @NotNull Component message,
-	                                        @NotNull Audience audience) {
-		Component formatted = data.getText();
-		formatted = translate(data.getLocale(), audience, formatted);
-		return MiniMessage.miniMessage()
-				.deserialize(
-						data.getFormat(),
-						Placeholder.component("prefix", data.getPrefix()),
-						Placeholder.component("suffix", data.getSuffix()),
-						Placeholder.component("sender", data.getName()),
-						Placeholder.component("message", formatted),
-						Placeholder.styling("color1", data.getColor()),
-						Placeholder.styling("color2", data.getColor2())
-				);
-	}
-
+	/**
+	 * Переводит сообщение, если язык отправителя отличается от языка получателя.
+	 * Используется как в ChatRender, так и в ChatData.send().
+	 */
 	public static Component translate(Locale originalLocale, Audience audience, Component message) {
-		if (!BetterChat.getInstance().getConfig().getBoolean("translation.enabled", true))
-			return message;
+		if (!BetterChat.getInstance().getLang().isTranslationEnabled()) return message;
 		if (!(audience instanceof Player receiver)) return message;
+
 		Locale receiverLocale = PlayerLanguageUtil.getLocale(receiver);
 		if (originalLocale.equals(receiverLocale)) return message;
+
 		String translated = OnlineTranslator.translate(
 				PlainTextComponentSerializer.plainText().serialize(message),
 				TranslationLanguage.AUTO,

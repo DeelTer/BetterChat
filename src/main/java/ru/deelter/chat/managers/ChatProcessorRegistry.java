@@ -4,11 +4,11 @@ import lombok.Getter;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.jetbrains.annotations.NotNull;
 import ru.deelter.chat.BetterChat;
+import ru.deelter.chat.model.ChatData;
+import ru.deelter.chat.model.ProcessorTag;
 import ru.deelter.chat.processors.AbstractChatProcessor;
-import ru.deelter.chat.processors.ProcessorTag;
 import ru.deelter.chat.processors.impl.*;
 import ru.deelter.chat.processors.replacer.impl.*;
-import ru.deelter.chat.utils.ChatData;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -46,6 +46,7 @@ public class ChatProcessorRegistry {
 	}
 
 	public void load() {
+		registerIfEnabled("anti_spam", () -> new AntiSpamProcessor(1));
 		// Entity effect processors
 		registerIfEnabled("confusion", () -> new EntityConfusionChatProcessor(100));
 		registerIfEnabled("underwater", () -> new EntityUnderwaterChatProcessor(110));
@@ -65,12 +66,18 @@ public class ChatProcessorRegistry {
 		registerIfEnabled("hide", () -> new HideReplacerProcessor(99994));
 		registerIfEnabled("command", () -> new CommandReplacerProcessor(99995));
 		registerIfEnabled("chat", () -> new ChatReplacerProcessor(99996));
+
+		registerIfEnabled("mention", () -> new MentionProcessor(200));
+		registerIfEnabled("empty_audience", () -> new EmptyAudienceProcessor(Integer.MAX_VALUE));
 	}
 
 	public void process(ChatData data) {
-		processors.stream()
-				.filter(processor -> processor.canProcess(data))
-				.forEach(processor -> processor.process(data));
+		for (AbstractChatProcessor processor : processors) {
+			if (processor.isTerminateChain()) break;
+			if (processor.canProcess(data)) {
+				processor.process(data);
+			}
+		}
 	}
 
 	public void unload() {

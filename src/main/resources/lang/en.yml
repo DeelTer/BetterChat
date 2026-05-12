@@ -1,13 +1,13 @@
 # BetterChat English localization
 messages:
   lang-set: "<color:#FFD700>BetterChat</color> <#C7B9A6>Language set to <lang>."
-  links:
-    open: "Click to open link"
-  chat:
-    copy: "Click to copy"
-    hide: "Click to reveal"
-    command: "Click to run command"
-    say: "Click to say"
+  links.open: "Click to open link"
+  chat.copy: "Click to copy"
+  chat.hide: "Click to reveal"
+  chat.command: "Click to run command"
+  chat.say: "Click to say"
   global: "GLOBAL"
   trade: "TRADE"
   underwater-chat: "*bul-bul*"
+  empty-audience: "<red>Nobody heard your message"
+  anti-spam.blocked: "<red>Too similar to your previous message"

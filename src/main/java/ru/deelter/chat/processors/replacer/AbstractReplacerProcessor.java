@@ -1,7 +1,7 @@
-package ru.deelter.chat.processors.replacer.impl;
+package ru.deelter.chat.processors.replacer;
 
 import ru.deelter.chat.processors.AbstractChatProcessor;
-import ru.deelter.chat.processors.ProcessorTag;
+import ru.deelter.chat.model.ProcessorTag;
 
 import java.util.Collections;
 import java.util.HashSet;

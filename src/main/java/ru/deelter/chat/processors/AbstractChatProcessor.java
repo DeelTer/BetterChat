@@ -5,7 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
-import ru.deelter.chat.utils.ChatData;
+import ru.deelter.chat.model.ChatData;
+import ru.deelter.chat.model.ProcessorTag;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -18,6 +19,12 @@ public abstract class AbstractChatProcessor {
 
 	private static final Set<ProcessorTag> EMPTY_SET = new HashSet<>();
 	private int priority = Integer.MAX_VALUE;
+
+	public AbstractChatProcessor(int priority) {
+		this.priority = priority;
+	}
+
+	private boolean terminateChain = false;
 
 	public abstract void process(@NotNull ChatData data);
 

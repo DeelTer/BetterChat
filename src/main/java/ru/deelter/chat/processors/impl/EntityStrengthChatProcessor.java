@@ -6,7 +6,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import ru.deelter.chat.processors.AbstractChatProcessor;
-import ru.deelter.chat.utils.ChatData;
+import ru.deelter.chat.model.ChatData;
 
 public class EntityStrengthChatProcessor extends AbstractChatProcessor {
 

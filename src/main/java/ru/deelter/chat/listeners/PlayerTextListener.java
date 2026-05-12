@@ -1,6 +1,7 @@
 package ru.deelter.chat.listeners;
 
 import io.papermc.paper.event.player.AsyncChatEvent;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -8,17 +9,22 @@ import org.bukkit.event.player.PlayerEditBookEvent;
 import org.bukkit.inventory.meta.BookMeta;
 import org.jetbrains.annotations.NotNull;
 import ru.deelter.chat.BetterChat;
-import ru.deelter.chat.processors.ProcessorTag;
-import ru.deelter.chat.utils.ChatData;
-import ru.deelter.chat.utils.ChatRender;
+import ru.deelter.chat.model.ProcessorTag;
+import ru.deelter.chat.model.ChatData;
+import ru.deelter.chat.renders.ChatRender;
+
+import java.util.stream.Collectors;
 
 public class PlayerTextListener implements Listener {
-
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onChat(@NotNull AsyncChatEvent event) {
 		ChatData data = ChatData.fromAsyncEvent(event);
 		data.process();
 		data.stripAudienceByRadius();
+
+		event.viewers().retainAll(data.getAudiences().stream()
+				.filter(a -> a instanceof Player)
+				.collect(Collectors.toSet()));
 		data.sendBubbles();
 		event.renderer(new ChatRender(data));
 	}

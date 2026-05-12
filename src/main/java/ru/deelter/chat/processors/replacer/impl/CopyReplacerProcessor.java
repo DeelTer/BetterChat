@@ -7,7 +7,8 @@ import net.kyori.adventure.text.event.HoverEvent;
 import org.jetbrains.annotations.NotNull;
 import ru.deelter.chat.BetterChat;
 import ru.deelter.chat.config.IconProvider;
-import ru.deelter.chat.utils.ChatData;
+import ru.deelter.chat.processors.replacer.AbstractReplacerProcessor;
+import ru.deelter.chat.model.ChatData;
 import ru.deelter.chat.utils.Lang;
 
 import java.util.regex.Pattern;
@@ -28,13 +29,13 @@ public class CopyReplacerProcessor extends AbstractReplacerProcessor {
 					String textToCopy = result.group(2);
 					Component icon = IconProvider.getIcon("copy");
 					Lang lang = BetterChat.getInstance().getLang();
-					String hoverCopy = lang.getMessage("chat.copy", null) != null ?
-							lang.getMessage("chat.copy", null).toString() : "Click to copy";
+					Component hoverCopy = lang.getMessage("chat-copy", null);
+					if (hoverCopy == null) hoverCopy = Component.text("Click to copy");
 					return Component.empty()
 							.append(icon)
 							.append(Component.text(" "))
 							.append(Component.text(textToCopy))
-							.hoverEvent(HoverEvent.showText(Component.text(hoverCopy)))
+							.hoverEvent(HoverEvent.showText(hoverCopy))
 							.clickEvent(ClickEvent.copyToClipboard(textToCopy));
 				}).build();
 		data.setText(data.getText().replaceText(replacer));
