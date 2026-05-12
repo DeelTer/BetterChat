@@ -1,4 +1,4 @@
-package ru.deelter.chat.processors.replacer;
+package ru.deelter.chat.replacer;
 
 import lombok.Builder;
 import net.kyori.adventure.text.format.TextColor;

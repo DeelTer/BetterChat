@@ -5,10 +5,10 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
-import ru.deelter.chat.BetterChat;
+import ru.deelter.chat.bukkit.BetterChat;
 import ru.deelter.chat.config.ChatConfig;
 import ru.deelter.chat.processors.AbstractChatProcessor;
-import ru.deelter.chat.model.ChatData;
+import ru.deelter.chat.utils.ChatData;
 
 public class EntityUnderwaterChatProcessor extends AbstractChatProcessor {
 

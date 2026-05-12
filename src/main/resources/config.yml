@@ -7,8 +7,11 @@
 #  Plugin website: https://deelter.ru
 #
 #  Permissions:
-#    betterchat.use     - Allows using chat with all modifiers
-#                          (default: true for all players)
+#    betterchat.use              - Allows using chat with all modifiers
+#                                   (default: true for all players)
+#    betterchat.antispam.bypass  - Bypass anti-spam similarity check
+#    betterchat.mention.bypass   - Disable receiving mention pings
+#                                   (players with this permission won't hear ping sounds)
 #
 #  Commands:
 #    /chat <text>        - Send a chat message with tag support
@@ -21,80 +24,117 @@
 #    - Custom tags (!global, $trade) with configurable radius and format
 #    - Inline replacements: [copy:text], [hide:secret], [cmd:/command], [link:label:url]
 #    - Automatic URL detection with service-specific icons
+#    - Cross-server global chat via Velocity (requires Velocity plugin)
 # =================================================================
 
+# -----------------------------------------------------------------
 # Language & translation settings
+# -----------------------------------------------------------------
 language:
   # Default language for the server (used when auto-detect is off)
   # Available: en, ru, uk, de, es, fr, zh (add your own .yml in lang/ folder)
   default: "en"
   # Automatically use player's client locale for plugin messages
   auto-detect: true
-
-translation:
   # Enable automatic chat translation between players with different languages
   # Translated messages show original text on hover
-  enabled: true
+  translation: true
 
+# -----------------------------------------------------------------
 # bStats metrics collection
+# -----------------------------------------------------------------
 metrics:
   # Send anonymous usage statistics to bstats.org
   # Disable if you prefer not to share data
   enabled: true
 
+# -----------------------------------------------------------------
 # Chat bubble display icons
 # You can use any Unicode/emoji characters supported by Minecraft
+# -----------------------------------------------------------------
 icons:
   copy: "📋"      # Copy to clipboard button
-  hide: "👁️‍"   # Hidden text reveal button
+  hide: "👁"   # Hidden text reveal button
   command: "⚡"    # Command execution button
   link: "🔗"       # URL link indicator
 
+# -----------------------------------------------------------------
 # Disable specific built-in processors by their IDs
-# Available IDs: confusion, underwater, strength, weakness, scale,
-# cave, invisibility, darkness, spectate, tag,
-# url_label, url, copy, hide, command, chat
+# -----------------------------------------------------------------
+# Available IDs:
+#   Entity effects: confusion, underwater, strength, weakness, scale,
+#                   cave, invisibility, darkness, spectate
+#   Tags & mentions: tag, mention, global_chat
+#   Replacers: url_label, url, copy, hide, command, chat
+#   Anti-spam & feedback: anti_spam, empty_audience
 #
 # Example: ["cave", "darkness"] disables cave echo and darkness effect
-disabled-processors: [ ]
+disabled-processors: []
 
+# -----------------------------------------------------------------
 # Chat bubble appearance settings
+# -----------------------------------------------------------------
 bubbles:
+  # How often the bubble queue is checked (in ticks, 20 ticks = 1 second)
+  # Lower values = more responsive queue, but slightly more CPU usage
   queue-tick-interval: 3
+
   # Default text width in pixels (prevents overly wide bubbles)
   default-width: 200
+
   # Minimum display time in ticks (20 ticks = 1 second)
   min-ticks: 40
+
   # Vertical offset above the entity (in blocks)
   offset-y: 0.25
+
   # Billboard type: FIXED, VERTICAL, HORIZONTAL, CENTER
   # CENTER - always faces the viewer (most readable)
   billboard: "CENTER"
+
   # Text shadow for better readability
   shadow: false
+
   # See-through when behind blocks
   see-through: false
+
   # Default background rectangle behind text
   default-background: false
-  # Pop-up animation when bubble appears
+
+  # Minimum TPS required to play pop-up animation
+  # If TPS drops below this, bubbles appear instantly without animation
   min-tps-for-animation: 18.0
+
+  # Minimum TPS required to show bubbles at all
+  # If TPS drops below this, bubbles are completely disabled
   min-tps-for-bubbles: 14.0
+
+  # Pop-up animation when bubble appears
   animation:
     pop-up:
       enabled: true
-      start-scale: 0.015      # Initial tiny size (20% of normal)
-      duration-ticks: 3     # Animation duration (20 ticks = 1 second)
+      # Initial scale (0.015 = 1.5% of full size, almost invisible)
+      # Lower values = more dramatic pop-up effect
+      start-scale: 0.015
+      # Animation duration in ticks (20 ticks = 1 second)
+      duration-ticks: 3
 
+# -----------------------------------------------------------------
 # Chat format and color settings
+# -----------------------------------------------------------------
 chat:
   # Message format templates
   # Available placeholders: <prefix>, <suffix>, <sender>, <message>, <color1>, <color2>
   formats:
     default: "<prefix><color1><sender><suffix>:</color1> <color2><message></color2>"
+    # Cave format - used when player is underground
     cave: "<color:#D0CAA5><sender>:</color> <color:#EFEEE6><message></color>"
+    # Spectator formats - used when spectating entities/players
     spectator-inside: "<color:#CBCCD2>[...]:</color> <color:#EFF0F6><message></color>"
     spectator-entity: "<color:#CBCCD2><sender>:</color> <color:#EFF0F6><message></color>"
+    # Sculk format - used near sculk sensors/shriekers
     sculk: "<color:#375e5b><sender>:</color> <color:#688a87><message></color>"
+
   # Color presets used by chat processors
   colors:
     default: "#FFD700"
@@ -108,33 +148,91 @@ chat:
     darkness: "#654C7D"
     darkness2: "#A795B9"
 
+# -----------------------------------------------------------------
 # Chat tags - prefix symbols that modify message radius and format
+# -----------------------------------------------------------------
+# Tags are detected at the beginning of a message.
+# radius: -1 = unlimited (global across the server)
+# global: when set, the message is sent via Velocity to other servers.
+#   - true: send to all servers
+#   - object with servers: send only to those servers (whitelist mode)
+#   - object with mode: "blacklist" and servers: send to all except those
 tags:
+  # Example: global tag (all servers, legacy syntax)
   global:
     symbol: "!"
-    radius: -1          # -1 = unlimited radius (global message)
+    radius: -1
     format: "<color:#525252>[G]</color> <prefix><color1><sender><suffix>:</color1> <color2><message></color2>"
+    global: true
+
+  # Example: trade chat
   trade:
     symbol: "$"
-    radius: -1          # -1 = unlimited radius
-    format: "<color:#9DFF00>$</color> <prefix><color1><sender><suffix>:</color1> <color2><message></color2>"
-  server:
-    symbol: ""
-    radius: -1          # -1 = unlimited radius
+    radius: -1
     format: "<color:#9DFF00>$</color> <prefix><color1><sender><suffix>:</color1> <color2><message></color2>"
 
+  # Example: global tag only for specific servers (whitelist)
+  global_bw:
+    symbol: "!gb"
+    radius: -1
+    format: "<color:#525252>[Lobbies]</color> <prefix><color1><sender><suffix>:</color1> <color2><message></color2>"
+    global:
+      servers:
+        - lobby
+        - lobby2
+
+  # Example: global tag excluding certain servers (blacklist)
+  global_except:
+    symbol: "!ge"
+    radius: -1
+    format: "<color:#525252>[Global-E]</color> <prefix><color1><sender><suffix>:</color1> <color2><message></color2>"
+    global:
+      mode: blacklist
+      servers:
+        - testserver
+
+# -----------------------------------------------------------------
+# Velocity cross-server settings
+# -----------------------------------------------------------------
+velocity:
+  enabled: false
+  # Server-level filter for incoming global messages (on Velocity proxy)
+  server-filter:
+    # Filter mode: none (allow all), blacklist, whitelist
+    mode: none
+    # List of server names to filter
+    servers: []
+
+# -----------------------------------------------------------------
+# @Mention system
+# -----------------------------------------------------------------
 mentions:
+  # Enable @player mentions in chat
   enabled: true
+  # Color of the highlighted @mention text
   color: "#FFD700"
+  # Sound played to the mentioned player (Minecraft sound key)
+  # Set to "" or "none" to disable sound
   sound: "block.note_block.bell"
+  # Permission to bypass receiving mention sounds
   bypass-permission: "betterchat.mention.bypass"
 
+# -----------------------------------------------------------------
+# Anti-spam system
+# -----------------------------------------------------------------
+# Prevents players from sending nearly identical messages repeatedly.
+# Uses Jaro-Winkler similarity algorithm (0.0 = completely different, 1.0 = identical).
 anti-spam:
+  # Enable anti-spam filtering
   enabled: true
-  similarity-threshold: 0.9   # 0.0 – 1.0 (0-100%)
+  # Similarity threshold (0.0 – 1.0). 0.9 = 90% similarity triggers block
+  similarity-threshold: 0.9
+  # Number of recent messages to compare against
   recent-messages-count: 5
 
+# -----------------------------------------------------------------
 # Link detection - services get custom colors and icons
+# -----------------------------------------------------------------
 links:
   # === CIS / Post-Soviet services ===
   vk:

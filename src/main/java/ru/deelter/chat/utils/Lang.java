@@ -8,9 +8,8 @@ import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.deelter.chat.BetterChat;
+import ru.deelter.chat.bukkit.BetterChat;
 
 import java.io.File;
 import java.util.HashMap;

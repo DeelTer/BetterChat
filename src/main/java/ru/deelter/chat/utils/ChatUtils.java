@@ -9,8 +9,7 @@ import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import ru.deelter.chat.BetterChat;
-import ru.deelter.chat.model.ChatData;
+import ru.deelter.chat.bukkit.BetterChat;
 import ru.deelter.chat.utils.translator.OnlineTranslator;
 import ru.deelter.chat.utils.translator.TranslationLanguage;
 

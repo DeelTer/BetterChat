@@ -6,8 +6,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import ru.deelter.chat.config.MentionConfig;
-import ru.deelter.chat.model.ChatData;
 import ru.deelter.chat.processors.AbstractChatProcessor;
+import ru.deelter.chat.utils.ChatData;
 
 import java.util.regex.Pattern;
 

@@ -6,7 +6,7 @@ import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
-import ru.deelter.chat.BetterChat;
+import ru.deelter.chat.bukkit.BetterChat;
 
 public final class LangTag {
 

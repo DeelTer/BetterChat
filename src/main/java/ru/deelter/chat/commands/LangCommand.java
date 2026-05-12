@@ -8,7 +8,7 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
-import ru.deelter.chat.BetterChat;
+import ru.deelter.chat.bukkit.BetterChat;
 import ru.deelter.chat.utils.PlayerLanguageUtil;
 
 import java.util.List;

@@ -14,7 +14,7 @@ import org.bukkit.util.Transformation;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
-import ru.deelter.chat.BetterChat;
+import ru.deelter.chat.bukkit.BetterChat;
 import ru.deelter.chat.config.BubbleConfig;
 
 import java.util.function.Consumer;

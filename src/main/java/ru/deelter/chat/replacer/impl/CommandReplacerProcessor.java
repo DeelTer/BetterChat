@@ -1,4 +1,4 @@
-package ru.deelter.chat.processors.replacer.impl;
+package ru.deelter.chat.replacer.impl;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.JoinConfiguration;
@@ -6,44 +6,43 @@ import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import org.jetbrains.annotations.NotNull;
-import ru.deelter.chat.BetterChat;
+import ru.deelter.chat.bukkit.BetterChat;
 import ru.deelter.chat.config.IconProvider;
-import ru.deelter.chat.processors.replacer.AbstractReplacerProcessor;
-import ru.deelter.chat.model.ChatData;
+import ru.deelter.chat.replacer.AbstractReplacerProcessor;
+import ru.deelter.chat.utils.ChatData;
 import ru.deelter.chat.utils.Lang;
 
 import java.util.regex.Pattern;
 
-public class ChatReplacerProcessor extends AbstractReplacerProcessor {
+public class CommandReplacerProcessor extends AbstractReplacerProcessor {
 
-	public static final Pattern PATTERN = Pattern.compile("\\[(chat|say|send):(?:([^:\\]]+):)?([^\\]]+)\\]");
+	public static final Pattern COMMAND_PATTERN = Pattern.compile("\\[(cd|cmd|command):(?:([^:\\]]+):)?([^\\]]+)\\]");
 
-	public ChatReplacerProcessor(int priority) {
+	public CommandReplacerProcessor(int priority) {
 		super(priority);
 	}
 
 	@Override
 	public void process(@NotNull ChatData data) {
 		TextReplacementConfig replacer = TextReplacementConfig.builder()
-				.match(PATTERN)
+				.match(COMMAND_PATTERN)
 				.replacement((result, builder) -> {
 					String label = result.group(2);
-					String cmdText = result.group(3);
-					if (label == null) label = cmdText;
-
+					String command = result.group(3);
+					if (label == null) label = command;
 					Component icon = IconProvider.getIcon("command");
 					Lang lang = BetterChat.getInstance().getLang();
-					Component hoverSay = lang.getMessage("chat-say", null);
-					if (hoverSay == null) hoverSay = Component.text("Click to say");
+					Component hoverCmd = lang.getMessage("chat-command", null);
+					if (hoverCmd == null) hoverCmd = Component.text("Click to run command");
 					return Component.join(JoinConfiguration.builder().separator(Component.text(" ")),
 							icon,
 							builder.content(label)
 									.hoverEvent(HoverEvent.showText(
 											Component.join(JoinConfiguration.separator(Component.text(" ")),
 													icon,
-													hoverSay,
-													Component.text(cmdText))))
-									.clickEvent(ClickEvent.runCommand("/chat " + cmdText))
+													hoverCmd,
+													Component.text("/" + command))))
+									.clickEvent(ClickEvent.runCommand("/" + command))
 									.build()
 					);
 				}).build();

@@ -5,7 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.TextDisplay;
 import org.jetbrains.annotations.NotNull;
-import ru.deelter.chat.BetterChat;
+import ru.deelter.chat.bukkit.BetterChat;
 
 import java.util.ArrayList;
 import java.util.List;

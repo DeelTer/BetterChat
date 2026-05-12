@@ -3,9 +3,9 @@ package ru.deelter.chat.processors.impl;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import ru.deelter.chat.BetterChat;
-import ru.deelter.chat.model.ChatData;
+import ru.deelter.chat.bukkit.BetterChat;
 import ru.deelter.chat.processors.AbstractChatProcessor;
+import ru.deelter.chat.utils.ChatData;
 import ru.deelter.chat.utils.Lang;
 
 public class EmptyAudienceProcessor extends AbstractChatProcessor {

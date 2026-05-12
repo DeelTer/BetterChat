@@ -1,14 +1,12 @@
-package ru.deelter.chat.managers;
+package ru.deelter.chat.processors;
 
 import lombok.Getter;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.jetbrains.annotations.NotNull;
-import ru.deelter.chat.BetterChat;
-import ru.deelter.chat.model.ChatData;
-import ru.deelter.chat.model.ProcessorTag;
-import ru.deelter.chat.processors.AbstractChatProcessor;
+import ru.deelter.chat.bukkit.BetterChat;
 import ru.deelter.chat.processors.impl.*;
-import ru.deelter.chat.processors.replacer.impl.*;
+import ru.deelter.chat.replacer.impl.*;
+import ru.deelter.chat.utils.ChatData;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -66,6 +64,7 @@ public class ChatProcessorRegistry {
 		registerIfEnabled("hide", () -> new HideReplacerProcessor(99994));
 		registerIfEnabled("command", () -> new CommandReplacerProcessor(99995));
 		registerIfEnabled("chat", () -> new ChatReplacerProcessor(99996));
+		registerIfEnabled("global_chat", () -> new GlobalChatProcessor(99998));
 
 		registerIfEnabled("mention", () -> new MentionProcessor(200));
 		registerIfEnabled("empty_audience", () -> new EmptyAudienceProcessor(Integer.MAX_VALUE));

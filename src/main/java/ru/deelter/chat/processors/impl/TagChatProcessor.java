@@ -4,9 +4,9 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.jetbrains.annotations.NotNull;
 import ru.deelter.chat.processors.AbstractChatProcessor;
-import ru.deelter.chat.model.ChatData;
-import ru.deelter.chat.model.ChatTag;
-import ru.deelter.chat.utils.tags.ChatTagRegistry;
+import ru.deelter.chat.tags.ChatTag;
+import ru.deelter.chat.tags.ChatTagRegistry;
+import ru.deelter.chat.utils.ChatData;
 
 public class TagChatProcessor extends AbstractChatProcessor {
 

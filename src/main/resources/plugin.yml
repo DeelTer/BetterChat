@@ -2,7 +2,7 @@ name: BetterChat
 description: $description
 prefix: BetterChat
 version: '${version}'
-main: ru.deelter.chat.BetterChat
+main: ru.deelter.chat.bukkit.BetterChat
 api-version: '1.21'
 load: POSTWORLD
 

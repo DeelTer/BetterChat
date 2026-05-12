@@ -13,7 +13,8 @@ dependencies {
     compileOnly("io.papermc.paper:paper-api:26.1.2.build.+")
     compileOnly("org.projectlombok:lombok:1.18.38")
     annotationProcessor("org.projectlombok:lombok:1.18.38")
-    compileOnly("org.joml:joml:1.10.5")
+    compileOnly("com.velocitypowered:velocity-api:3.3.0-SNAPSHOT")
+    annotationProcessor("com.velocitypowered:velocity-api:3.3.0-SNAPSHOT")
 
     implementation("org.bstats:bstats-bukkit:3.0.2")
     implementation("com.github.ben-manes.caffeine:caffeine:3.1.8")
@@ -25,10 +26,13 @@ java {
 }
 
 tasks {
+    jar {
+        enabled = false
+    }
     shadowJar {
         relocate("org.bstats", "${project.group}.shaded.bstats")
         relocate("com.github.benmanes.caffeine", "${project.group}.shaded.caffeine")
-        minimize()
+        relocate("org.apache.commons.text", "${project.group}.shaded.commons-text")
     }
     assemble {
         dependsOn(shadowJar)
@@ -40,6 +44,7 @@ tasks {
     }
 
     processResources {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
         val props = mapOf("version" to version, "description" to project.description)
         filesMatching("plugin.yml") {
             expand(props)

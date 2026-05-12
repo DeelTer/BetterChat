@@ -5,8 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
-import ru.deelter.chat.model.ChatData;
-import ru.deelter.chat.model.ProcessorTag;
+import ru.deelter.chat.utils.ChatData;
 
 import java.util.HashSet;
 import java.util.Set;

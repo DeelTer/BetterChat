@@ -8,14 +8,14 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerEditBookEvent;
 import org.bukkit.inventory.meta.BookMeta;
 import org.jetbrains.annotations.NotNull;
-import ru.deelter.chat.BetterChat;
-import ru.deelter.chat.model.ProcessorTag;
-import ru.deelter.chat.model.ChatData;
+import ru.deelter.chat.bukkit.BetterChat;
+import ru.deelter.chat.processors.ProcessorTag;
 import ru.deelter.chat.renders.ChatRender;
+import ru.deelter.chat.utils.ChatData;
 
 import java.util.stream.Collectors;
 
-public class PlayerTextListener implements Listener {
+public class PlayerMessageListener implements Listener {
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onChat(@NotNull AsyncChatEvent event) {
 		ChatData data = ChatData.fromAsyncEvent(event);

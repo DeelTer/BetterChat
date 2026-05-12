@@ -1,4 +1,4 @@
-package ru.deelter.chat.model;
+package ru.deelter.chat.utils;
 
 import io.papermc.paper.event.player.AsyncChatEvent;
 import lombok.*;
@@ -7,6 +7,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -15,14 +16,12 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
-import ru.deelter.chat.BetterChat;
 import ru.deelter.chat.bubbles.BubbleManager;
+import ru.deelter.chat.bukkit.BetterChat;
 import ru.deelter.chat.config.ChatConfig;
 import ru.deelter.chat.processors.AbstractChatProcessor;
-import ru.deelter.chat.utils.ChatUtils;
-import ru.deelter.chat.utils.LocationUtils;
-import ru.deelter.chat.utils.PlayerLanguageUtil;
 
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 @Getter
@@ -32,7 +31,7 @@ import java.util.*;
 @AllArgsConstructor
 public class ChatData {
 
-	private String format; // без @Builder.Default, задаётся в фабриках
+	private String format;
 	@Builder.Default
 	private Component text = Component.text("text");
 	@Builder.Default
@@ -55,7 +54,7 @@ public class ChatData {
 	private Component suffix = Component.empty();
 	private Component name;
 	@Builder.Default
-	private TextColor color = ChatConfig.colorDefault;  // теперь используем ChatConfig
+	private TextColor color = ChatConfig.colorDefault;
 	@Builder.Default
 	private TextColor color2 = ChatConfig.colorDefault2;
 
@@ -179,5 +178,11 @@ public class ChatData {
 					);
 			audience.sendMessage(rendered);
 		});
+	}
+
+	public byte[] serializeForGlobal() {
+		String raw = PlainTextComponentSerializer.plainText().serialize(text);
+		String payload = locale.toLanguageTag() + "|" + format + "|" + raw;
+		return payload.getBytes(StandardCharsets.UTF_8);
 	}
 }

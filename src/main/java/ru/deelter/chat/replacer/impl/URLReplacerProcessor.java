@@ -1,4 +1,4 @@
-package ru.deelter.chat.processors.replacer.impl;
+package ru.deelter.chat.replacer.impl;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.JoinConfiguration;
@@ -6,11 +6,11 @@ import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import org.jetbrains.annotations.NotNull;
-import ru.deelter.chat.BetterChat;
+import ru.deelter.chat.bukkit.BetterChat;
 import ru.deelter.chat.config.IconProvider;
-import ru.deelter.chat.processors.replacer.AbstractReplacerProcessor;
-import ru.deelter.chat.processors.replacer.ChatLink;
-import ru.deelter.chat.model.ChatData;
+import ru.deelter.chat.replacer.AbstractReplacerProcessor;
+import ru.deelter.chat.replacer.ChatLink;
+import ru.deelter.chat.utils.ChatData;
 
 import java.util.regex.Pattern;
 

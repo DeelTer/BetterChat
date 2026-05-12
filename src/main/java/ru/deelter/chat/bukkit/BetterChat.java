@@ -1,4 +1,4 @@
-package ru.deelter.chat;
+package ru.deelter.chat.bukkit;
 
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -10,17 +10,20 @@ import ru.deelter.chat.bubbles.BubbleManager;
 import ru.deelter.chat.commands.ChatCommand;
 import ru.deelter.chat.commands.LangCommand;
 import ru.deelter.chat.config.*;
-import ru.deelter.chat.listeners.PlayerTextListener;
-import ru.deelter.chat.managers.ChatProcessorRegistry;
-import ru.deelter.chat.processors.replacer.ChatLink;
+import ru.deelter.chat.listeners.GlobalMessageListener;
+import ru.deelter.chat.listeners.PlayerMessageListener;
+import ru.deelter.chat.processors.ChatProcessorRegistry;
+import ru.deelter.chat.replacer.ChatLink;
+import ru.deelter.chat.tags.ChatTagRegistry;
 import ru.deelter.chat.utils.Lang;
-import ru.deelter.chat.utils.tags.ChatTagRegistry;
 
 @Getter
 public final class BetterChat extends JavaPlugin {
 
 	@Getter
 	private static BetterChat instance;
+	@Getter
+	private static boolean velocityEnabled = false;
 	private final ChatProcessorRegistry manager = new ChatProcessorRegistry();
 	private Lang lang;
 
@@ -46,10 +49,11 @@ public final class BetterChat extends JavaPlugin {
 		lang = new Lang(this);
 		manager.load();
 
-		Bukkit.getPluginManager().registerEvents(new PlayerTextListener(), this);
-		Bukkit.getPluginManager().registerEvents(new BubbleChatListener(), this);
-
+		linkVelocity();
 		BubbleManager.runQueueTimer();
+
+		Bukkit.getPluginManager().registerEvents(new PlayerMessageListener(), this);
+		Bukkit.getPluginManager().registerEvents(new BubbleChatListener(), this);
 
 		PluginCommand langCmd = getCommand("lang");
 		if (langCmd != null) {
@@ -62,6 +66,14 @@ public final class BetterChat extends JavaPlugin {
 			chatCmd.setExecutor(new ChatCommand());
 		}
 		MetricsSetup.init(this);
+	}
+
+	private void linkVelocity() {
+		velocityEnabled = getConfig().getBoolean("velocity.enabled", false);
+		if (!velocityEnabled) return;
+
+		getServer().getMessenger().registerOutgoingPluginChannel(this, "betterchat:global");
+		getServer().getMessenger().registerIncomingPluginChannel(this, "betterchat:global", new GlobalMessageListener());
 	}
 
 	@Override

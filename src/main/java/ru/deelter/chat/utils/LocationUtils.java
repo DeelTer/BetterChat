@@ -6,6 +6,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
+import ru.deelter.chat.bukkit.BetterChat;
 
 public class LocationUtils {
 
@@ -50,7 +51,7 @@ public class LocationUtils {
 		boost.setY(0.3);
 		entity.setVelocity(boost);
 
-		Bukkit.getScheduler().scheduleSyncDelayedTask(ru.deelter.chat.BetterChat.getInstance(), () -> {
+		Bukkit.getScheduler().scheduleSyncDelayedTask(BetterChat.getInstance(), () -> {
 			double g = -0.08;
 			double d = location.distance(entityLocation);
 			double t = d;

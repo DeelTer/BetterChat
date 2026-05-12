@@ -5,6 +5,7 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
+import ru.deelter.chat.bukkit.BetterChat;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -64,7 +65,7 @@ public class OnlineTranslator {
 			} catch (SocketTimeoutException | UnknownHostException e) {
 				failedToTranslate = true;
 				Bukkit.getScheduler().runTaskTimerAsynchronously(
-						ru.deelter.chat.BetterChat.getInstance(),
+						BetterChat.getInstance(),
 						() -> failedToTranslate = false, 0, 60 * 20L);
 				return textToTranslate;
 			} catch (Exception e) {
@@ -82,7 +83,7 @@ public class OnlineTranslator {
 			e.printStackTrace();
 			failedToTranslate = true;
 			Bukkit.getScheduler().runTaskTimerAsynchronously(
-					ru.deelter.chat.BetterChat.getInstance(),
+					BetterChat.getInstance(),
 					() -> failedToTranslate = false, 0, 60 * 60 * 20L);
 			return textToTranslate;
 		}
