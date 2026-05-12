@@ -1,6 +1,7 @@
 package ru.deelter.chat.bubbles;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.TextDisplay;
@@ -13,6 +14,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @Getter
+@RequiredArgsConstructor
 public class BubbleQueue {
 
 	private final List<Bubble> bubbles = new ArrayList<>();
@@ -20,10 +22,6 @@ public class BubbleQueue {
 
 	public BubbleQueue(@NotNull Entity source) {
 		this(source.getUniqueId());
-	}
-
-	public BubbleQueue(@NotNull UUID sourceUuid) {
-		this.sourceUuid = sourceUuid;
 	}
 
 	public static BubbleQueue get(@NotNull UUID sourceUuid) {
@@ -65,5 +63,5 @@ public class BubbleQueue {
 		QUEUE.remove(sourceUuid);
 	}
 
-	private static final Map<UUID, BubbleQueue> QUEUE = BubbleManager.QUEUE; // ссылка на общую очередь
+	private static final Map<UUID, BubbleQueue> QUEUE = BubbleManager.QUEUE;
 }
