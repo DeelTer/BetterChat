@@ -54,8 +54,10 @@ public class ChatProcessorRegistry {
 		registerIfEnabled("cave", () -> new EntityCaveChatProcessor(150));
 		registerIfEnabled("invisibility", () -> new EntityInvisibilityChatProcessor(160));
 		registerIfEnabled("darkness", () -> new EntityDarknessChatProcessor(170));
-		registerIfEnabled("spectate", () -> new EntitySpectateChatProcessor(Integer.MAX_VALUE));
-		registerIfEnabled("tag", () -> new TagChatProcessor(Integer.MAX_VALUE));
+		registerIfEnabled("spectate", () -> new EntitySpectateChatProcessor(180));
+		registerIfEnabled("global_chat", () -> new GlobalChatProcessor(200));
+		registerIfEnabled("tag", () -> new TagChatProcessor(220));
+		registerIfEnabled("empty_audience", () -> new EmptyAudienceProcessor(Integer.MAX_VALUE));
 
 		// Replacer processors
 		registerIfEnabled("url_label", () -> new URLLabelReplacerProcessor(99991));
@@ -64,15 +66,12 @@ public class ChatProcessorRegistry {
 		registerIfEnabled("hide", () -> new HideReplacerProcessor(99994));
 		registerIfEnabled("command", () -> new CommandReplacerProcessor(99995));
 		registerIfEnabled("chat", () -> new ChatReplacerProcessor(99996));
-		registerIfEnabled("global_chat", () -> new GlobalChatProcessor(99998));
-
 		registerIfEnabled("mention", () -> new MentionProcessor(200));
-		registerIfEnabled("empty_audience", () -> new EmptyAudienceProcessor(Integer.MAX_VALUE));
 	}
 
 	public void process(ChatData data) {
 		for (AbstractChatProcessor processor : processors) {
-			if (processor.isTerminateChain()) break;
+			if (data.isTerminated()) break;
 			if (processor.canProcess(data)) {
 				processor.process(data);
 			}

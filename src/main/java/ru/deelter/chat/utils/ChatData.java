@@ -7,7 +7,6 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -20,8 +19,8 @@ import ru.deelter.chat.bubbles.BubbleManager;
 import ru.deelter.chat.bukkit.BetterChat;
 import ru.deelter.chat.config.ChatConfig;
 import ru.deelter.chat.processors.AbstractChatProcessor;
+import ru.deelter.chat.renders.ChatRender;
 
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 @Getter
@@ -57,6 +56,7 @@ public class ChatData {
 	private TextColor color = ChatConfig.colorDefault;
 	@Builder.Default
 	private TextColor color2 = ChatConfig.colorDefault2;
+	private boolean terminated = false;
 
 	// Фабрики
 	public static ChatData fromEntity(@NotNull Entity entity) {
@@ -180,9 +180,18 @@ public class ChatData {
 		});
 	}
 
-	public byte[] serializeForGlobal() {
-		String raw = PlainTextComponentSerializer.plainText().serialize(text);
-		String payload = locale.toLanguageTag() + "|" + format + "|" + raw;
-		return payload.getBytes(StandardCharsets.UTF_8);
+	/**
+	 * Рендерит сообщение так, как оно должно выглядеть для глобального чата
+	 */
+	public Component renderGlobal() {
+		if (!(getEntity() instanceof Player player)) {
+			return Component.empty();
+		}
+		return new ChatRender(this).render(
+				player,
+				Component.empty(),
+				getText(),
+				Audience.empty()
+		);
 	}
 }

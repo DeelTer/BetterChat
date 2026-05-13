@@ -31,7 +31,7 @@ public class AntiSpamProcessor extends AbstractChatProcessor {
 				player.sendActionBar(spamBlockedMessage);
 			}
 			data.getAudiences().clear();
-			setTerminateChain(true);
+			data.setTerminated(true);
 		}
 	}
 

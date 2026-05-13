@@ -6,6 +6,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -13,10 +14,13 @@ import ru.deelter.chat.bukkit.BetterChat;
 import ru.deelter.chat.utils.translator.OnlineTranslator;
 import ru.deelter.chat.utils.translator.TranslationLanguage;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 
 @UtilityClass
 public class ChatUtils {
+
+	public static final @NotNull String VELOCITY_MESSAGE_CHANNEL_ID = "betterchat:global";
 
 	public static @NotNull String applyConfusedFormat(@NotNull String s) {
 		ExtendedRandom random = ExtendedRandom.getInstance();
@@ -64,5 +68,31 @@ public class ChatUtils {
 				TranslationLanguage.from(receiverLocale)
 		);
 		return Component.text(translated).hoverEvent(HoverEvent.showText(message));
+	}
+
+	public static void sendGlobal(@NotNull ChatData data, String routing) {
+		if (!BetterChat.isVelocityEnabled()) return;
+		if (!(data.getEntity() instanceof Player player)) return;
+
+		Component rendered = data.renderGlobal();
+
+		String localeTag = data.getLocale().toLanguageTag();
+		String originalTextJson = GsonComponentSerializer.gson().serialize(data.getText());
+		String renderedJson = GsonComponentSerializer.gson().serialize(rendered);
+
+		// Безопасное логирование
+		String plainText = PlainTextComponentSerializer.plainText().serialize(data.getText());
+		String shortMsg = plainText.length() > 60
+				? plainText.substring(0, 57) + "..."
+				: plainText;
+
+		String payload = routing + "|" + localeTag + "|" + originalTextJson + "|" + renderedJson;
+
+		byte[] bytes = payload.getBytes(StandardCharsets.UTF_8);
+		if (bytes.length > 32767) {
+			System.err.println("[BetterChat] Global message too large, dropping: " + bytes.length);
+			return;
+		}
+		player.sendPluginMessage(BetterChat.getInstance(), VELOCITY_MESSAGE_CHANNEL_ID, bytes);
 	}
 }

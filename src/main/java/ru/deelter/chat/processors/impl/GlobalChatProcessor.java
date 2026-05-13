@@ -8,8 +8,7 @@ import ru.deelter.chat.processors.AbstractChatProcessor;
 import ru.deelter.chat.tags.ChatTag;
 import ru.deelter.chat.tags.ChatTagRegistry;
 import ru.deelter.chat.utils.ChatData;
-
-import java.nio.charset.StandardCharsets;
+import ru.deelter.chat.utils.ChatUtils;
 
 public class GlobalChatProcessor extends AbstractChatProcessor {
 
@@ -25,15 +24,18 @@ public class GlobalChatProcessor extends AbstractChatProcessor {
 		ChatTag tag = ChatTagRegistry.getSuitable(text);
 		if (tag == null || !tag.isGlobal()) return;
 
-		// Формируем payload
-		String routing = tag.getGlobalMode() + ":" + String.join(",", tag.getGlobalServers());
-		String payload = routing + "|" + data.getLocale().toLanguageTag() + "|" + data.getFormat() + "|" + text;
-		byte[] message = payload.getBytes(StandardCharsets.UTF_8);
+		String mode = tag.getGlobalMode() != null ? tag.getGlobalMode() : "whitelist";
+		String servers = tag.getGlobalServers() != null
+				? String.join(",", tag.getGlobalServers())
+				: "";
 
-		player.sendPluginMessage(BetterChat.getInstance(), "betterchat:global", message);
+		String routing = mode + ":" + servers;
 
-		data.getAudiences().clear();
-		setTerminateChain(true);
+		if (servers.isEmpty() && "whitelist".equalsIgnoreCase(mode)) {
+			routing = "whitelist:";
+		}
+
+		ChatUtils.sendGlobal(data, routing);
 	}
 
 	@Override

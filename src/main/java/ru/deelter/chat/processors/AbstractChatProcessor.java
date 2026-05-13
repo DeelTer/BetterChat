@@ -19,12 +19,6 @@ public abstract class AbstractChatProcessor {
 	private static final Set<ProcessorTag> EMPTY_SET = new HashSet<>();
 	private int priority = Integer.MAX_VALUE;
 
-	public AbstractChatProcessor(int priority) {
-		this.priority = priority;
-	}
-
-	private boolean terminateChain = false;
-
 	public abstract void process(@NotNull ChatData data);
 
 	public abstract boolean canProcess(@NotNull ChatData data);

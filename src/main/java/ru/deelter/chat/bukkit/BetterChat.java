@@ -16,6 +16,7 @@ import ru.deelter.chat.listeners.PlayerMessageListener;
 import ru.deelter.chat.processors.ChatProcessorRegistry;
 import ru.deelter.chat.replacer.ChatLink;
 import ru.deelter.chat.tags.ChatTagRegistry;
+import ru.deelter.chat.utils.ChatUtils;
 import ru.deelter.chat.utils.Lang;
 
 @Getter
@@ -74,8 +75,8 @@ public final class BetterChat extends JavaPlugin {
 		velocityEnabled = getConfig().getBoolean("velocity.enabled", false);
 		if (!velocityEnabled) return;
 
-		getServer().getMessenger().registerOutgoingPluginChannel(this, "betterchat:global");
-		getServer().getMessenger().registerIncomingPluginChannel(this, "betterchat:global", new GlobalMessageListener());
+		getServer().getMessenger().registerOutgoingPluginChannel(this, ChatUtils.VELOCITY_MESSAGE_CHANNEL_ID);
+		getServer().getMessenger().registerIncomingPluginChannel(this, ChatUtils.VELOCITY_MESSAGE_CHANNEL_ID, new GlobalMessageListener());
 	}
 
 	@Override

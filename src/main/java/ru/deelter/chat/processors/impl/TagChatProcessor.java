@@ -18,14 +18,14 @@ public class TagChatProcessor extends AbstractChatProcessor {
 	public void process(@NotNull ChatData data) {
 		Component message = data.getText();
 		String text = PlainTextComponentSerializer.plainText().serialize(message);
-		ChatTag chatTag = ChatTagRegistry.getSuitable(text);
-		if (chatTag == null) return;
+		ChatTag tag = ChatTagRegistry.getSuitable(text);
+		if (tag == null) return;
 
-		if (chatTag.getFormat() != null) {
-			data.setFormat(chatTag.getFormat());
+		if (tag.getFormat() != null) {
+			data.setFormat(tag.getFormat());
 		}
-		data.setText(data.getText().replaceText(chatTag.getReplacementConfig()));
-		data.setRadius(chatTag.getRadius());
+		data.setText(data.getText().replaceText(tag.getReplacementConfig()));
+		data.setRadius(tag.getRadius());
 	}
 
 	@Override

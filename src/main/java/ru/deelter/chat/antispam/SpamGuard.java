@@ -14,7 +14,7 @@ public class SpamGuard {
 
 	private static final JaroWinklerSimilarity similarity = new JaroWinklerSimilarity();
 	private static final Cache<UUID, LinkedList<String>> recentMessages = Caffeine.newBuilder()
-			.expireAfterAccess(Duration.ofMinutes(10))
+			.expireAfterAccess(Duration.ofSeconds(5))
 			.build();
 
 	public static boolean isSimilar(@NonNull Player player, String message, double threshold, int maxCount) {

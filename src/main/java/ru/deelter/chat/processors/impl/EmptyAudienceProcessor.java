@@ -16,17 +16,16 @@ public class EmptyAudienceProcessor extends AbstractChatProcessor {
 
 	@Override
 	public void process(@NotNull ChatData data) {
-		if (data.getAudiences().isEmpty() && data.getEntity() instanceof Player player) {
-			Lang lang = BetterChat.getInstance().getLang();
-			Component message = lang.getMessage("empty-audience", player);
-			if (message != null) {
-				player.sendActionBar(message);
-			}
+		Player player = (Player) data.getEntity();
+		Lang lang = BetterChat.getInstance().getLang();
+		Component message = lang.getMessage("empty-audience", player);
+		if (message != null) {
+			player.sendActionBar(message);
 		}
 	}
 
 	@Override
 	public boolean canProcess(@NotNull ChatData data) {
-		return true;
+		return data.getAudiences().isEmpty() && data.getEntity() instanceof Player;
 	}
 }

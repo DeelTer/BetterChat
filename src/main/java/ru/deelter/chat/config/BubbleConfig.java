@@ -48,15 +48,5 @@ public final class BubbleConfig {
 
 		minTpsForBubbles = config.getDouble("min-tps-for-bubbles", 15.0);
 		minTpsForAnimation = config.getDouble("bubbles.min-tps-for-animation", 18.0);
-
-		System.out.println("bubbles.default-width: " + defaultWidth);
-		System.out.println("bubbles.min-ticks: " + minTicks);
-		System.out.println("bubbles.offset-y: " + offsetY);
-		System.out.println("bubbles.billboard: " + billboard);
-		System.out.println("bubbles.shadow: " + shadow);
-		System.out.println("bubbles.see-through: " + seeThrough);
-		System.out.println("bubbles.default-background: " + defaultBackground);
-		System.out.println("bubbles.pop-up.enabled: " + popUpEnabled);
-		System.out.println("bubbles.pop-up.duration-ticks: " + popUpDurationTicks);
 	}
 }

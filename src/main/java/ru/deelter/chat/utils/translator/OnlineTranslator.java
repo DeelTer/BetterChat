@@ -31,7 +31,7 @@ public class OnlineTranslator {
 	// Кеш: ключ = "fromId:toId:text"
 	private static final Cache<String, String> translationCache = Caffeine.newBuilder()
 			.maximumSize(2000)
-			.expireAfterWrite(Duration.ofHours(2))
+			.expireAfterWrite(Duration.ofHours(3))
 			.build();
 
 	@SuppressWarnings("deprecation")
