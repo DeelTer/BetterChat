@@ -1,6 +1,7 @@
 package ru.deelter.chat.listeners;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
@@ -46,7 +47,7 @@ public class GlobalMessageListener implements PluginMessageListener {
 							TranslationLanguage.from(PlayerLanguageUtil.getLocale(player))
 					);
 					textToSend = Component.text(translated)
-							.hoverEvent(net.kyori.adventure.text.event.HoverEvent.showText(renderedMessage));
+							.hoverEvent(HoverEvent.showText(renderedMessage));
 				}
 
 				player.sendMessage(textToSend);
