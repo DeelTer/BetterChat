@@ -55,8 +55,8 @@ public class ChatProcessorRegistry {
 		registerIfEnabled("invisibility", () -> new EntityInvisibilityChatProcessor(160));
 		registerIfEnabled("darkness", () -> new EntityDarknessChatProcessor(170));
 		registerIfEnabled("spectate", () -> new EntitySpectateChatProcessor(180));
-		registerIfEnabled("global_chat", () -> new GlobalChatProcessor(200));
 		registerIfEnabled("tag", () -> new TagChatProcessor(220));
+		registerIfEnabled("global_chat", () -> new GlobalChatProcessor(230));
 		registerIfEnabled("empty_audience", () -> new EmptyAudienceProcessor(Integer.MAX_VALUE));
 
 		// Replacer processors

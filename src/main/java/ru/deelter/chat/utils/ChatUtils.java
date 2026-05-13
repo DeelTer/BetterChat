@@ -80,12 +80,6 @@ public class ChatUtils {
 		String originalTextJson = GsonComponentSerializer.gson().serialize(data.getText());
 		String renderedJson = GsonComponentSerializer.gson().serialize(rendered);
 
-		// Безопасное логирование
-		String plainText = PlainTextComponentSerializer.plainText().serialize(data.getText());
-		String shortMsg = plainText.length() > 60
-				? plainText.substring(0, 57) + "..."
-				: plainText;
-
 		String payload = routing + "|" + localeTag + "|" + originalTextJson + "|" + renderedJson;
 
 		byte[] bytes = payload.getBytes(StandardCharsets.UTF_8);

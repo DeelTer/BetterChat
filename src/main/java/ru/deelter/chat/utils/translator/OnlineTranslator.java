@@ -26,7 +26,7 @@ public class OnlineTranslator {
 	private static final Pattern TRANSLATION_RESULT = Pattern.compile(
 			"class=\"result-container\">([^<]*)</div>", Pattern.MULTILINE);
 
-	private static boolean failedToTranslate = false;
+	private static volatile boolean failedToTranslate = false;
 
 	// Кеш: ключ = "fromId:toId:text"
 	private static final Cache<String, String> translationCache = Caffeine.newBuilder()
@@ -64,9 +64,9 @@ public class OnlineTranslator {
 						"\": result page couldn't be parsed");
 			} catch (SocketTimeoutException | UnknownHostException e) {
 				failedToTranslate = true;
-				Bukkit.getScheduler().runTaskTimerAsynchronously(
+				Bukkit.getScheduler().runTaskLaterAsynchronously(
 						BetterChat.getInstance(),
-						() -> failedToTranslate = false, 0, 60 * 20L);
+						() -> failedToTranslate = false, 60 * 20L);
 				return textToTranslate;
 			} catch (Exception e) {
 				try {
@@ -82,9 +82,9 @@ public class OnlineTranslator {
 		} catch (TranslatorException e) {
 			e.printStackTrace();
 			failedToTranslate = true;
-			Bukkit.getScheduler().runTaskTimerAsynchronously(
+			Bukkit.getScheduler().runTaskLaterAsynchronously(
 					BetterChat.getInstance(),
-					() -> failedToTranslate = false, 0, 60 * 60 * 20L);
+					() -> failedToTranslate = false, 60 * 60 * 20L);
 			return textToTranslate;
 		}
 	}

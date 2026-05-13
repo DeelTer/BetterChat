@@ -18,7 +18,7 @@ public class GlobalChatProcessor extends AbstractChatProcessor {
 
 	@Override
 	public void process(@NotNull ChatData data) {
-		if (!(data.getEntity() instanceof Player player)) return;
+		if (!(data.getEntity() instanceof Player)) return;
 
 		String text = PlainTextComponentSerializer.plainText().serialize(data.getText());
 		ChatTag tag = ChatTagRegistry.getSuitable(text);
@@ -31,7 +31,7 @@ public class GlobalChatProcessor extends AbstractChatProcessor {
 
 		String routing = mode + ":" + servers;
 
-		if (servers.isEmpty() && "whitelist".equalsIgnoreCase(mode)) {
+		if (servers.isEmpty() && mode.equalsIgnoreCase("whitelist")) {
 			routing = "whitelist:";
 		}
 

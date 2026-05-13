@@ -1,6 +1,7 @@
 package ru.deelter.chat.renders;
 
 import io.papermc.paper.chat.ChatRenderer;
+import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
@@ -18,17 +19,13 @@ import ru.deelter.chat.utils.translator.TranslationLanguage;
 
 import java.util.Locale;
 
+@RequiredArgsConstructor
 public class ChatRender implements ChatRenderer {
 
 	private final ChatData data;
 
-	public ChatRender(ChatData data) {
-		this.data = data;
-	}
-
 	@Override
-	public @NotNull Component render(@NotNull Player player, @NotNull Component displayName,
-	                                 @NotNull Component message, @NotNull Audience audience) {
+	public @NotNull Component render(@NotNull Player player, @NotNull Component displayName, @NotNull Component message, @NotNull Audience audience) {
 		Component text = data.getText();
 
 		if (BetterChat.getInstance().getLang().isTranslationEnabled() && audience instanceof Player receiver) {

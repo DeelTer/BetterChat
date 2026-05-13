@@ -8,18 +8,24 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
+import ru.deelter.chat.bukkit.BetterChat;
 import ru.deelter.chat.utils.ChatUtils;
 import ru.deelter.chat.utils.PlayerLanguageUtil;
 import ru.deelter.chat.utils.translator.OnlineTranslator;
 import ru.deelter.chat.utils.translator.TranslationLanguage;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class GlobalMessageListener implements PluginMessageListener {
 
+	public static final GsonComponentSerializer GSON = GsonComponentSerializer.gson();
+
 	@Override
-	public void onPluginMessageReceived(@NotNull String channel, @NotNull Player receiver, byte[] message) {
+	public void onPluginMessageReceived(@NotNull String channel, @NotNull Player receiver, byte @NonNull [] message) {
 		if (!channel.equals(ChatUtils.VELOCITY_MESSAGE_CHANNEL_ID)) return;
 
 		String payload = new String(message, StandardCharsets.UTF_8);
@@ -33,25 +39,32 @@ public class GlobalMessageListener implements PluginMessageListener {
 
 		try {
 			Locale senderLocale = Locale.forLanguageTag(localeTag);
-			Component originalText = GsonComponentSerializer.gson().deserialize(originalJson);
-			Component renderedMessage = GsonComponentSerializer.gson().deserialize(renderedJson);
+			Component originalText = GSON.deserialize(originalJson);
+			Component renderedMessage = GSON.deserialize(renderedJson);
 
-			for (Player player : Bukkit.getOnlinePlayers()) {
+			// Snapshot on main thread — player list can't be read safely from async
+			List<Player> players = new ArrayList<>(Bukkit.getOnlinePlayers());
 
-				Component textToSend = renderedMessage;
+			Bukkit.getScheduler().runTaskAsynchronously(BetterChat.getInstance(), () -> {
+				for (Player player : players) {
+					if (!player.isOnline()) continue;
 
-				if (!senderLocale.equals(PlayerLanguageUtil.getLocale(player))) {
-					String translated = OnlineTranslator.translate(
-							PlainTextComponentSerializer.plainText().serialize(originalText),
-							TranslationLanguage.AUTO,
-							TranslationLanguage.from(PlayerLanguageUtil.getLocale(player))
-					);
-					textToSend = Component.text(translated)
-							.hoverEvent(HoverEvent.showText(renderedMessage));
+					Component textToSend = renderedMessage;
+					Locale locale = PlayerLanguageUtil.getLocale(player);
+
+					if (BetterChat.getInstance().getLang().isTranslationEnabled() && !senderLocale.equals(locale)) {
+						String translated = OnlineTranslator.translate(
+								PlainTextComponentSerializer.plainText().serialize(originalText),
+								TranslationLanguage.AUTO,
+								TranslationLanguage.from(locale)
+						);
+						textToSend = Component.text(translated)
+								.hoverEvent(HoverEvent.showText(renderedMessage));
+					}
+
+					player.sendMessage(textToSend);
 				}
-
-				player.sendMessage(textToSend);
-			}
+			});
 
 		} catch (Exception e) {
 			System.err.println("[BetterChat] Failed to process global message");

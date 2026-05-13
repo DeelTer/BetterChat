@@ -36,7 +36,7 @@ public class PlayerMessageListener implements Listener {
 		if (!event.isSigning()) return;
 
 		for (int i = 1; i <= book.pages().size(); i++) {
-			ChatData chatData = new ChatData(); // temporary without entity
+			ChatData chatData = new ChatData();
 			chatData.setText(book.page(i));
 			chatData.process(BetterChat.getInstance()
 					.getManager()
