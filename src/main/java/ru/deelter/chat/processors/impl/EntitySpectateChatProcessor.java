@@ -71,7 +71,8 @@ public class EntitySpectateChatProcessor extends AbstractChatProcessor {
 				(сообщение видно только ему и тому кто в него вселился).
 			 */
 			viewers.clear();
-			viewers.add(Audience.audience(player, target));
+			viewers.add(player);
+			viewers.add(target);
 			data.setFormat(ChatConfig.formatSpectatorInside);
 			return;
 		}

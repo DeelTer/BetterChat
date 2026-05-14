@@ -4,6 +4,7 @@ import net.kyori.adventure.audience.Audience;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import ru.deelter.chat.config.ChatConfig;
 import ru.deelter.chat.processors.AbstractChatProcessor;
@@ -23,6 +24,13 @@ public class EntityCaveChatProcessor extends AbstractChatProcessor {
 		Set<Audience> viewers = data.getAudiences();
 		Location location = data.getLocation();
 
+		data.setRadius(ChatConfig.caveRadius);
+
+		viewers.removeIf(audience -> {
+			if (!(audience instanceof Player p)) return false;
+			return !isInCave(p.getLocation());
+		});
+
 		Bukkit.getOnlinePlayers().forEach(viewer -> {
 			Location viewerLocation = viewer.getLocation();
 			if (!isInCave(viewerLocation)) return;
@@ -40,6 +48,7 @@ public class EntityCaveChatProcessor extends AbstractChatProcessor {
 
 	private boolean isInCave(@NotNull Location location) {
 		if (location.getY() >= 0) return false;
+		if (location.getWorld() == null) return false;
 		return location.getWorld().getEnvironment() == World.Environment.NORMAL;
 	}
 }
