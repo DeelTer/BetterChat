@@ -1,5 +1,6 @@
 package ru.deelter.chat.utils;
 
+import com.google.gson.JsonObject;
 import lombok.experimental.UtilityClass;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
@@ -74,13 +75,19 @@ public class ChatUtils {
 		if (!BetterChat.isVelocityEnabled()) return;
 		if (!(data.getEntity() instanceof Player player)) return;
 
-		Component rendered = data.renderGlobal();
+		GsonComponentSerializer gcs = GsonComponentSerializer.gson();
 
-		String localeTag = data.getLocale().toLanguageTag();
-		String originalTextJson = GsonComponentSerializer.gson().serialize(data.getText());
-		String renderedJson = GsonComponentSerializer.gson().serialize(rendered);
+		JsonObject obj = new JsonObject();
+		obj.addProperty("locale", data.getLocale().toLanguageTag());
+		obj.addProperty("format", data.getFormat() != null ? data.getFormat() : "");
+		obj.addProperty("color1", data.getColor() != null ? data.getColor().asHexString() : "#ffffff");
+		obj.addProperty("color2", data.getColor2() != null ? data.getColor2().asHexString() : "#ffffff");
+		obj.add("prefix", gcs.serializeToTree(data.getPrefix() != null ? data.getPrefix() : Component.empty()));
+		obj.add("suffix", gcs.serializeToTree(data.getSuffix() != null ? data.getSuffix() : Component.empty()));
+		obj.add("sender", gcs.serializeToTree(data.getName() != null ? data.getName() : Component.empty()));
+		obj.add("text", gcs.serializeToTree(data.getText() != null ? data.getText() : Component.empty()));
 
-		String payload = routing + "|" + localeTag + "|" + originalTextJson + "|" + renderedJson;
+		String payload = routing + "|" + obj.toString();
 
 		byte[] bytes = payload.getBytes(StandardCharsets.UTF_8);
 		if (bytes.length > 32767) {

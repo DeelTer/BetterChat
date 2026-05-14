@@ -1,12 +1,10 @@
 package ru.deelter.chat.processors.impl;
 
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import ru.deelter.chat.bukkit.BetterChat;
 import ru.deelter.chat.processors.AbstractChatProcessor;
 import ru.deelter.chat.tags.ChatTag;
-import ru.deelter.chat.tags.ChatTagRegistry;
 import ru.deelter.chat.utils.ChatData;
 import ru.deelter.chat.utils.ChatUtils;
 
@@ -20,8 +18,7 @@ public class GlobalChatProcessor extends AbstractChatProcessor {
 	public void process(@NotNull ChatData data) {
 		if (!(data.getEntity() instanceof Player)) return;
 
-		String text = PlainTextComponentSerializer.plainText().serialize(data.getText());
-		ChatTag tag = ChatTagRegistry.getSuitable(text);
+		ChatTag tag = data.getMatchedTag();
 		if (tag == null || !tag.isGlobal()) return;
 
 		String mode = tag.getGlobalMode() != null ? tag.getGlobalMode() : "whitelist";
@@ -43,8 +40,7 @@ public class GlobalChatProcessor extends AbstractChatProcessor {
 		if (!BetterChat.isVelocityEnabled()) return false;
 		if (!(data.getEntity() instanceof Player)) return false;
 
-		String text = PlainTextComponentSerializer.plainText().serialize(data.getText());
-		ChatTag tag = ChatTagRegistry.getSuitable(text);
+		ChatTag tag = data.getMatchedTag();
 		return tag != null && tag.isGlobal();
 	}
 }

@@ -21,6 +21,7 @@ public class TagChatProcessor extends AbstractChatProcessor {
 		ChatTag tag = ChatTagRegistry.getSuitable(text);
 		if (tag == null) return;
 
+		data.setMatchedTag(tag);
 		if (tag.getFormat() != null) {
 			data.setFormat(tag.getFormat());
 		}

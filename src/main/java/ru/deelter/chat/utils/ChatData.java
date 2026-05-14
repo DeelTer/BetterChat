@@ -20,6 +20,7 @@ import ru.deelter.chat.bukkit.BetterChat;
 import ru.deelter.chat.config.ChatConfig;
 import ru.deelter.chat.processors.AbstractChatProcessor;
 import ru.deelter.chat.renders.ChatRender;
+import ru.deelter.chat.tags.ChatTag;
 
 import java.util.*;
 
@@ -57,6 +58,7 @@ public class ChatData {
 	@Builder.Default
 	private TextColor color2 = ChatConfig.colorDefault2;
 	private boolean terminated = false;
+	private ChatTag matchedTag;
 
 	// Фабрики
 	public static ChatData fromEntity(@NotNull Entity entity) {
