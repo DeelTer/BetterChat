@@ -19,7 +19,6 @@ import ru.deelter.chat.bubbles.BubbleManager;
 import ru.deelter.chat.bukkit.BetterChat;
 import ru.deelter.chat.config.ChatConfig;
 import ru.deelter.chat.processors.AbstractChatProcessor;
-import ru.deelter.chat.renders.ChatRender;
 import ru.deelter.chat.tags.ChatTag;
 
 import java.util.*;
@@ -182,18 +181,4 @@ public class ChatData {
 		});
 	}
 
-	/**
-	 * Рендерит сообщение так, как оно должно выглядеть для глобального чата
-	 */
-	public Component renderGlobal() {
-		if (!(getEntity() instanceof Player player)) {
-			return Component.empty();
-		}
-		return new ChatRender(this).render(
-				player,
-				Component.empty(),
-				getText(),
-				Audience.empty()
-		);
-	}
 }

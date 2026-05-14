@@ -33,24 +33,34 @@ public class BubbleQueue {
 	}
 
 	public boolean hasBubbles() {
-		return !bubbles.isEmpty();
+		synchronized (bubbles) {
+			return !bubbles.isEmpty();
+		}
 	}
 
 	public void add(@NotNull Bubble bubble) {
-		bubbles.add(bubble);
+		synchronized (bubbles) {
+			bubbles.add(bubble);
+		}
 	}
 
 	public void showNext() {
-		Bubble bubble = bubbles.get(0);
+		Bubble bubble;
+		synchronized (bubbles) {
+			if (bubbles.isEmpty()) return;
+			bubble = bubbles.get(0);
+		}
 		bubble.show();
 
 		Bukkit.getScheduler().runTaskLater(BetterChat.getInstance(), () -> {
-			if (!bubbles.isEmpty()) {
-				bubbles.removeFirst();
-				TextDisplay display = bubble.getDisplay();
-				if (display != null) {
-					display.remove();
+			synchronized (bubbles) {
+				if (!bubbles.isEmpty()) {
+					bubbles.removeFirst();
 				}
+			}
+			TextDisplay display = bubble.getDisplay();
+			if (display != null) {
+				display.remove();
 			}
 		}, bubble.getDisplayTime());
 	}

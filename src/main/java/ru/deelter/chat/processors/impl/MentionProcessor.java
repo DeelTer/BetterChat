@@ -34,7 +34,7 @@ public class MentionProcessor extends AbstractChatProcessor {
 							boolean canHear = data.getAudiences().stream()
 									.filter(a -> a instanceof Player)
 									.map(a -> (Player) a)
-									.anyMatch(p -> p.getName().equalsIgnoreCase(targetName));
+									.anyMatch(p -> p.getUniqueId().equals(target.getUniqueId()));
 
 							boolean wantsPing = !target.hasPermission("betterchat.mention.bypass");
 

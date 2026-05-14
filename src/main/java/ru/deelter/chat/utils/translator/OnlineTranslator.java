@@ -12,8 +12,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.time.Duration;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -48,9 +46,8 @@ public class OnlineTranslator {
 		}
 
 		try {
-			String pageSource = "";
 			try {
-				pageSource = getPageSource(textToTranslate, translateFrom.id(), translateTo.id());
+				String pageSource = getPageSource(textToTranslate, translateFrom.id(), translateTo.id());
 				Matcher matcher = TRANSLATION_RESULT.matcher(pageSource);
 				if (matcher.find()) {
 					String match = matcher.group(1);
@@ -60,8 +57,7 @@ public class OnlineTranslator {
 						return translated;
 					}
 				}
-				throw new TranslatorException("Could not translate \"" + textToTranslate +
-						"\": result page couldn't be parsed");
+				throw new TranslatorException("result page couldn't be parsed");
 			} catch (SocketTimeoutException | UnknownHostException e) {
 				failedToTranslate = true;
 				Bukkit.getScheduler().runTaskLaterAsynchronously(
@@ -69,18 +65,10 @@ public class OnlineTranslator {
 						() -> failedToTranslate = false, 60 * 20L);
 				return textToTranslate;
 			} catch (Exception e) {
-				try {
-					Path p = Files.createTempFile("translator-pagedump", ".html").toAbsolutePath();
-					Files.writeString(p, pageSource);
-					throw new TranslatorException(
-							"Could not translate string, see dumped page at " + p, e);
-				} catch (IOException ioe) {
-					throw new TranslatorException(
-							"Could not translate string, and the page could not be dumped", ioe);
-				}
+				throw new TranslatorException("Could not translate string", e);
 			}
 		} catch (TranslatorException e) {
-			e.printStackTrace();
+			BetterChat.getInstance().getLogger().warning("Translation failed: " + e.getMessage());
 			failedToTranslate = true;
 			Bukkit.getScheduler().runTaskLaterAsynchronously(
 					BetterChat.getInstance(),

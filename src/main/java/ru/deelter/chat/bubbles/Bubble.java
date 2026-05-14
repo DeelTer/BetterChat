@@ -52,6 +52,7 @@ public class Bubble {
 
 	public void show() {
 		Location location = source.getLocation();
+		if (location.getWorld() == null) return;
 		display = location.getWorld().spawn(location, TextDisplay.class, d -> {
 			d.text(component);
 			d.setShadowed(shadowed);

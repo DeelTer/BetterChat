@@ -6,19 +6,23 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.deelter.chat.bukkit.BetterChat;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
 public class ChatTagRegistry {
 
-	public static final Set<ChatTag> TAGS = new HashSet<>();
+	private static volatile Set<ChatTag> TAGS = Set.of();
 
 	public static void init() {
 		FileConfiguration config = BetterChat.getInstance().getConfig();
 		ConfigurationSection tags = config.getConfigurationSection("tags");
-		if (tags == null) return;
+		if (tags == null) {
+			TAGS = Set.of();
+			return;
+		}
 
+		Set<ChatTag> built = new LinkedHashSet<>();
 		tags.getKeys(false).forEach(key -> {
 
 			ConfigurationSection tagSection = tags.getConfigurationSection(key);
@@ -33,7 +37,7 @@ public class ChatTagRegistry {
 			if (tagSection.isConfigurationSection("global")) {
 				ConfigurationSection globalSec = tagSection.getConfigurationSection("global");
 				builder.global(true);
-				builder.globalMode(globalSec.getString("mode", "whitelist")); // по умолчанию whitelist
+				builder.globalMode(globalSec.getString("mode", "whitelist"));
 				builder.globalServers(globalSec.getStringList("servers"));
 			} else if (tagSection.isBoolean("global")) {
 				boolean globalValue = tagSection.getBoolean("global", false);
@@ -45,8 +49,14 @@ public class ChatTagRegistry {
 			} else {
 				builder.global(false);
 			}
-			TAGS.add(builder.build());
+			built.add(builder.build());
 		});
+
+		TAGS = Set.copyOf(built);
+	}
+
+	public static @NotNull Set<ChatTag> getTags() {
+		return TAGS;
 	}
 
 	public static @Nullable ChatTag getSuitable(@NotNull String text) {

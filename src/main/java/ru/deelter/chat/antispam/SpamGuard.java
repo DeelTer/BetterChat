@@ -21,15 +21,15 @@ public class SpamGuard {
 		UUID uuid = player.getUniqueId();
 		LinkedList<String> list = recentMessages.get(uuid, k -> new LinkedList<>());
 
-		for (String old : list) {
-			if (similarity.apply(message, old) >= threshold) {
-				return true;
+		synchronized (list) {
+			for (String old : list) {
+				if (similarity.apply(message, old) >= threshold) {
+					return true;
+				}
 			}
+			list.addLast(message);
+			if (list.size() > maxCount) list.removeFirst();
 		}
-		list.addLast(message);
-		if (list.size() > maxCount) list.removeFirst();
-
-		recentMessages.put(uuid, list);
 		return false;
 	}
 

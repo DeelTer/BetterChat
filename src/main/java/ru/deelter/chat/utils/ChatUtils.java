@@ -1,15 +1,14 @@
 package ru.deelter.chat.utils;
 
-import com.google.gson.JsonObject;
 import lombok.experimental.UtilityClass;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.messaging.Messenger;
 import org.jetbrains.annotations.NotNull;
 import ru.deelter.chat.bukkit.BetterChat;
 import ru.deelter.chat.utils.translator.OnlineTranslator;
@@ -26,6 +25,7 @@ public class ChatUtils {
 	public static @NotNull String applyConfusedFormat(@NotNull String s) {
 		ExtendedRandom random = ExtendedRandom.getInstance();
 		char[] chars = s.toCharArray();
+
 		for (int i = 0; i < chars.length; i++) {
 			if (!Character.isSpaceChar(chars[i]) && random.getDouble() < 0.35) {
 				chars[i] = chars[random.getInt(0, chars.length)];
@@ -75,23 +75,11 @@ public class ChatUtils {
 		if (!BetterChat.isVelocityEnabled()) return;
 		if (!(data.getEntity() instanceof Player player)) return;
 
-		GsonComponentSerializer gcs = GsonComponentSerializer.gson();
-
-		JsonObject obj = new JsonObject();
-		obj.addProperty("locale", data.getLocale().toLanguageTag());
-		obj.addProperty("format", data.getFormat() != null ? data.getFormat() : "");
-		obj.addProperty("color1", data.getColor() != null ? data.getColor().asHexString() : "#ffffff");
-		obj.addProperty("color2", data.getColor2() != null ? data.getColor2().asHexString() : "#ffffff");
-		obj.add("prefix", gcs.serializeToTree(data.getPrefix() != null ? data.getPrefix() : Component.empty()));
-		obj.add("suffix", gcs.serializeToTree(data.getSuffix() != null ? data.getSuffix() : Component.empty()));
-		obj.add("sender", gcs.serializeToTree(data.getName() != null ? data.getName() : Component.empty()));
-		obj.add("text", gcs.serializeToTree(data.getText() != null ? data.getText() : Component.empty()));
-
-		String payload = routing + "|" + obj.toString();
-
+		String payload = routing + "|" + GlobalChatPayload.from(data).toJson();
 		byte[] bytes = payload.getBytes(StandardCharsets.UTF_8);
-		if (bytes.length > 32767) {
-			System.err.println("[BetterChat] Global message too large, dropping: " + bytes.length);
+
+		if (bytes.length > Messenger.MAX_MESSAGE_SIZE) {
+			BetterChat.getInstance().getLogger().warning("Global message too large, dropping: " + bytes.length);
 			return;
 		}
 		player.sendPluginMessage(BetterChat.getInstance(), VELOCITY_MESSAGE_CHANNEL_ID, bytes);
