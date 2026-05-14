@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import ru.deelter.chat.config.ChatConfig;
 import ru.deelter.chat.processors.AbstractChatProcessor;
 import ru.deelter.chat.utils.ChatData;
+import ru.deelter.chat.utils.PlayerLanguageUtil;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -81,7 +82,7 @@ public class EntitySpectateChatProcessor extends AbstractChatProcessor {
  			Человек может вселиться в овцу и разговаривать от её имени.
  		 */
 		ChatData data2 = ChatData.fromEntity(entity);
-		data2.setLocale(player.locale());
+		data2.setLocale(PlayerLanguageUtil.getLocale(player));
 		data2.setFormat(ChatConfig.formatSpectatorEntity);
 		data2.setText(data.getText());
 		data2.setRadius(data.getRadius());

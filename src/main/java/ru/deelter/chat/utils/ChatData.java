@@ -46,7 +46,9 @@ public class ChatData {
 	private boolean spectating;
 	private AsyncChatEvent asyncChatEvent;
 	@Builder.Default
-	private Locale locale = Locale.forLanguageTag("ru");
+	private Locale locale = Locale.forLanguageTag(BetterChat.getInstance()
+			.getLang()
+			.getDefaultLanguage());
 	@Builder.Default
 	private Component prefix = Component.empty();
 	@Builder.Default
