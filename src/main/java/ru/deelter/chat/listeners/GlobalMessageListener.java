@@ -5,6 +5,8 @@ import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import net.kyori.adventure.text.minimessage.tag.standard.StandardTags;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -26,6 +28,30 @@ public class GlobalMessageListener implements PluginMessageListener {
 
 	private static final int DEFAULT_COLOR = 16777215;
 
+	/**
+	 * Restricted MiniMessage for cross-server format parsing.
+	 * Excludes &lt;click&gt; tag — prevents a malicious peer server from injecting
+	 * commands that execute when receiver clicks on the message.
+	 */
+	private static final MiniMessage SAFE_MM = MiniMessage.builder()
+			.tags(TagResolver.builder()
+					.resolver(StandardTags.color())
+					.resolver(StandardTags.decorations())
+					.resolver(StandardTags.font())
+					.resolver(StandardTags.gradient())
+					.resolver(StandardTags.hoverEvent())
+					.resolver(StandardTags.insertion())
+					.resolver(StandardTags.keybind())
+					.resolver(StandardTags.newline())
+					.resolver(StandardTags.rainbow())
+					.resolver(StandardTags.reset())
+					.resolver(StandardTags.score())
+					.resolver(StandardTags.selector())
+					.resolver(StandardTags.transition())
+					.resolver(StandardTags.translatable())
+					.build())
+			.build();
+
 	@Override
 	public void onPluginMessageReceived(@NotNull String channel, @NotNull Player receiver, byte @NonNull [] message) {
 		if (!channel.equals(ChatUtils.VELOCITY_MESSAGE_CHANNEL_ID)) return;
@@ -46,10 +72,10 @@ public class GlobalMessageListener implements PluginMessageListener {
 		final TextColor color1 = parseColor(payload.getColor1());
 		final TextColor color2 = parseColor(payload.getColor2());
 		final String format = payload.getFormat() != null ? payload.getFormat() : "<message>";
-		final Component prefix = payload.getPrefix() != null ? payload.getPrefix() : Component.empty();
-		final Component suffix = payload.getSuffix() != null ? payload.getSuffix() : Component.empty();
-		final Component sender = payload.getSender() != null ? payload.getSender() : Component.empty();
-		final Component originalText = payload.getText() != null ? payload.getText() : Component.empty();
+		final Component prefix = sanitize(payload.getPrefix() != null ? payload.getPrefix() : Component.empty());
+		final Component suffix = sanitize(payload.getSuffix() != null ? payload.getSuffix() : Component.empty());
+		final Component sender = sanitize(payload.getSender() != null ? payload.getSender() : Component.empty());
+		final Component originalText = sanitize(payload.getText() != null ? payload.getText() : Component.empty());
 
 		// Snapshot players on main thread — can't iterate online players from async safely
 		final List<Player> players = new ArrayList<>(Bukkit.getOnlinePlayers());
@@ -79,7 +105,7 @@ public class GlobalMessageListener implements PluginMessageListener {
 					return Component.text(translated).hoverEvent(HoverEvent.showText(originalText));
 				});
 
-				Component rendered = MiniMessage.miniMessage().deserialize(
+				Component rendered = SAFE_MM.deserialize(
 						format,
 						LangTag.resolver(),
 						Placeholder.component("prefix", prefix),
@@ -99,5 +125,22 @@ public class GlobalMessageListener implements PluginMessageListener {
 		if (hex == null) return TextColor.color(DEFAULT_COLOR);
 		TextColor textColor = TextColor.fromHexString(hex);
 		return textColor != null ? textColor : TextColor.color(DEFAULT_COLOR);
+	}
+
+	/**
+	 * Recursively strips clickEvent from a Component tree.
+	 * Defends against a malicious peer server embedding runCommand click events
+	 * directly into prefix/suffix/sender/text Components via Gson.
+	 */
+	private static @NotNull Component sanitize(@NotNull Component component) {
+		Component stripped = component.clickEvent(null);
+		List<Component> children = component.children();
+		if (children.isEmpty()) return stripped;
+
+		List<Component> sanitizedChildren = new ArrayList<>(children.size());
+		for (Component child : children) {
+			sanitizedChildren.add(sanitize(child));
+		}
+		return stripped.children(sanitizedChildren);
 	}
 }

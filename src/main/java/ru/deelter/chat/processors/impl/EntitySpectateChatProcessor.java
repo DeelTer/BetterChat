@@ -29,28 +29,33 @@ public class EntitySpectateChatProcessor extends AbstractChatProcessor {
 			return;
 		}
 		Set<Audience> viewers = data.getAudiences();
-		if (!(entity instanceof Player target)) {
- 			/*
- 				Человек может вселиться в овцу и разговаривать от её имени
- 			 */
-			ChatData data2 = ChatData.fromEntity(entity);
-			data2.setLocale(player.locale());
-			data2.setFormat(ChatConfig.formatSpectatorEntity);
-			data2.setText(data.getText());
-			data2.setRadius(data.getRadius());
-			data2.setAudiences(new HashSet<>(data.getAudiences()));
-
+		if (entity instanceof Player target) {
+			/*
+				Здесь игрок должен один на один разговаривать с человеком
+				(сообщение видно только ему и тому кто в него вселился)
+			 */
 			viewers.clear();
+			viewers.add(Audience.audience(player, target));
 
-			data2.process();
-			data2.send();
-			data2.sendBubbles();
+			data.setFormat(ChatConfig.formatSpectatorInside);
 			return;
 		}
-		viewers.clear();
-		viewers.add(Audience.audience(player, target));
 
-		data.setFormat(ChatConfig.formatSpectatorInside);
+		/*
+ 			Человек может вселиться в овцу и разговаривать от её имени
+ 		 */
+		ChatData data2 = ChatData.fromEntity(entity);
+		data2.setLocale(player.locale());
+		data2.setFormat(ChatConfig.formatSpectatorEntity);
+		data2.setText(data.getText());
+		data2.setRadius(data.getRadius());
+		data2.setAudiences(new HashSet<>(data.getAudiences()));
+
+		viewers.clear();
+
+		data2.process();
+		data2.send();
+		data2.sendBubbles();
 	}
 
 	@Override
