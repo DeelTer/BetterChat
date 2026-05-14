@@ -58,6 +58,7 @@ public class ChatData {
 	private TextColor color = ChatConfig.colorDefault;
 	@Builder.Default
 	private TextColor color2 = ChatConfig.colorDefault2;
+	@Builder.Default
 	private boolean terminated = false;
 	private ChatTag matchedTag;
 
