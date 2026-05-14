@@ -1,5 +1,6 @@
 package ru.deelter.chat.tags;
 
+import lombok.Getter;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.jetbrains.annotations.NotNull;
@@ -10,6 +11,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+@Getter
 public class ChatTagRegistry {
 
 	private static volatile Set<ChatTag> TAGS = Set.of();
@@ -53,10 +55,6 @@ public class ChatTagRegistry {
 		});
 
 		TAGS = Set.copyOf(built);
-	}
-
-	public static @NotNull Set<ChatTag> getTags() {
-		return TAGS;
 	}
 
 	public static @Nullable ChatTag getSuitable(@NotNull String text) {
