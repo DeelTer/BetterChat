@@ -2,11 +2,17 @@ plugins {
     id("java-library")
     id("xyz.jpenilla.run-paper") version "3.0.2"
     id("com.gradleup.shadow") version "9.4.1"
+    id("maven-publish")
 }
+
+group = "ru.deelter"
+version = "1.0.1"
+description = "Advanced chat system with bubbles, effects, and cross-server messaging"
 
 repositories {
     mavenCentral()
     maven("https://repo.papermc.io/repository/maven-public/")
+    maven("https://repo.velocitypowered.com/snapshots/")
 }
 
 dependencies {
@@ -26,28 +32,55 @@ java {
 }
 
 tasks {
-    jar {
-        enabled = false
-    }
-    shadowJar {
-        relocate("org.bstats", "${project.group}.shaded.bstats")
-        relocate("com.github.benmanes.caffeine", "${project.group}.shaded.caffeine")
-        relocate("org.apache.commons.text", "${project.group}.shaded.commons-text")
-    }
-    assemble {
-        dependsOn(shadowJar)
-    }
-
-    runServer {
-        minecraftVersion("26.1.2")
-        jvmArgs("-Xms2G", "-Xmx2G", "-Dcom.mojang.eula.agree=true")
-    }
-
     processResources {
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
         val props = mapOf("version" to version, "description" to project.description)
         filesMatching("plugin.yml") {
             expand(props)
+        }
+    }
+
+    compileJava {
+        options.encoding = "UTF-8"
+    }
+
+    jar {
+        enabled = true
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+        manifest {
+            attributes["Main-Class"] = "ru.deelter.chat.bukkit.BetterChat"
+        }
+    }
+
+    shadowJar {
+        archiveClassifier.set("")
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+        relocate("org.bstats", "${project.group}.shaded.bstats")
+        relocate("com.github.benmanes.caffeine", "${project.group}.shaded.caffeine")
+        relocate("org.apache.commons.text", "${project.group}.shaded.commons.text")
+        relocate("org.apache.commons.lang3", "${project.group}.shaded.commons.lang3")
+
+        exclude("META-INF/maven/**")
+        exclude("META-INF/versions/**")
+        exclude("META-INF/services/**")
+    }
+
+    assemble {
+        dependsOn(shadowJar)
+    }
+
+    runServer {
+        minecraftVersion("1.21.3")
+        jvmArgs("-Xms2G", "-Xmx2G", "-Dcom.mojang.eula.agree=true")
+    }
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("BetterChat") {
+            from(components["java"])
+            artifact(tasks.shadowJar)
         }
     }
 }

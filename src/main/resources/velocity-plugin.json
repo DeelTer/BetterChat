@@ -1,6 +1,0 @@
-{
-	"id": "betterchat",
-	"name": "BetterChat",
-	"version": "${version}",
-	"main": "ru.deelter.chat.velocity.BetterChatVelocity"
-}
