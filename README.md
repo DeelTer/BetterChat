@@ -2,7 +2,7 @@
 
 **Flexible chat system with modifiers, bubbles, and auto‑translation for Paper servers.**
 
-[![Paper](https://img.shields.io/badge/Paper-26.1.2+-blue)](https://papermc.io)
+[![Paper](https://img.shields.io/badge/Paper-1.21.3+-blue)](https://papermc.io)
 [![Velocity](https://img.shields.io/badge/Velocity-Supported-green)](https://velocitypowered.com)
 [![bStats](https://img.shields.io/badge/bStats-Enabled-brightgreen)](https://bstats.org/plugin/bukkit/deelter-betterchat/31258)
 [![License](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
