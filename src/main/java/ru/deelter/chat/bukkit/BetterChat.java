@@ -8,8 +8,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import ru.deelter.chat.bubbles.BubbleChatListener;
 import ru.deelter.chat.bubbles.BubbleManager;
 import ru.deelter.chat.commands.ChatCommand;
-import ru.deelter.chat.commands.LangCommand;
+import ru.deelter.chat.commands.LanguageCommand;
 import ru.deelter.chat.config.*;
+import ru.deelter.chat.language.*;
 import ru.deelter.chat.listeners.AntiSpamAuthListener;
 import ru.deelter.chat.listeners.GlobalMessageListener;
 import ru.deelter.chat.listeners.PlayerMessageListener;
@@ -17,7 +18,7 @@ import ru.deelter.chat.processors.ChatProcessorRegistry;
 import ru.deelter.chat.replacer.ChatLink;
 import ru.deelter.chat.tags.ChatTagRegistry;
 import ru.deelter.chat.utils.ChatUtils;
-import ru.deelter.chat.utils.Lang;
+import ru.deelter.chat.language.Lang;
 
 @Getter
 public final class BetterChat extends JavaPlugin {
@@ -28,6 +29,7 @@ public final class BetterChat extends JavaPlugin {
 	private static boolean velocityEnabled = false;
 	private final ChatProcessorRegistry manager = new ChatProcessorRegistry();
 	private Lang lang;
+	private LanguageManager languageManager;
 
 	@Override
 	public void onLoad() {
@@ -41,6 +43,7 @@ public final class BetterChat extends JavaPlugin {
 
 		FileConfiguration config = getConfig();
 		ChatConfig.init(config);
+		LanguageStorageConfig.init(config);
 		IconProvider.init(config);
 		BubbleConfig.init(config);
 		MentionConfig.init(config);
@@ -48,9 +51,11 @@ public final class BetterChat extends JavaPlugin {
 
 		ChatLink.load(config);
 		ChatTagRegistry.init();
+
 		lang = new Lang(this);
 		manager.load();
 
+		initLanguageStorage();
 		linkVelocity();
 		BubbleManager.runQueueTimer();
 
@@ -58,15 +63,15 @@ public final class BetterChat extends JavaPlugin {
 		Bukkit.getPluginManager().registerEvents(new BubbleChatListener(), this);
 		Bukkit.getPluginManager().registerEvents(new AntiSpamAuthListener(), this);
 
-		PluginCommand langCmd = getCommand("lang");
-		if (langCmd != null) {
-			LangCommand executor = new LangCommand();
-			langCmd.setExecutor(executor);
-			langCmd.setTabCompleter(executor);
+		PluginCommand langCommand = getCommand("lang");
+		if (langCommand != null) {
+			LanguageCommand executor = new LanguageCommand();
+			langCommand.setExecutor(executor);
+			langCommand.setTabCompleter(executor);
 		}
-		PluginCommand chatCmd = getCommand("chat");
-		if (chatCmd != null) {
-			chatCmd.setExecutor(new ChatCommand());
+		PluginCommand chatCommand = getCommand("chat");
+		if (chatCommand != null) {
+			chatCommand.setExecutor(new ChatCommand());
 		}
 		MetricsSetup.init(this);
 	}
@@ -81,6 +86,7 @@ public final class BetterChat extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
+		languageManager.shutdown();
 		manager.unload();
 	}
 
@@ -91,5 +97,21 @@ public final class BetterChat extends JavaPlugin {
 		IconProvider.init(config);
 		ChatLink.reload(config);
 		lang.reload();
+	}
+
+	private void initLanguageStorage() {
+		LanguageStorage storage = switch (LanguageStorageConfig.getType().toUpperCase()) {
+			case "MYSQL" -> new MySQLStorage(
+					LanguageStorageConfig.getMysqlHost(),
+					LanguageStorageConfig.getMysqlPort(),
+					LanguageStorageConfig.getMysqlDatabase(),
+					LanguageStorageConfig.getMysqlUser(),
+					LanguageStorageConfig.getMysqlPassword()
+			);
+			case "SQLITE" -> new SQLiteStorage();
+			default -> new H2Storage();
+		};
+		languageManager = new LanguageManager();
+		languageManager.init(storage);
 	}
 }

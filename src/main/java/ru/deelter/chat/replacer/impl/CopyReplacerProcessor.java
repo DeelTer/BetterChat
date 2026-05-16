@@ -9,7 +9,7 @@ import ru.deelter.chat.bukkit.BetterChat;
 import ru.deelter.chat.config.IconProvider;
 import ru.deelter.chat.replacer.AbstractReplacerProcessor;
 import ru.deelter.chat.utils.ChatData;
-import ru.deelter.chat.utils.Lang;
+import ru.deelter.chat.language.Lang;
 
 import java.util.regex.Pattern;
 

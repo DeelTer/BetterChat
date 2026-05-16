@@ -16,8 +16,7 @@ import org.jspecify.annotations.NonNull;
 import ru.deelter.chat.bukkit.BetterChat;
 import ru.deelter.chat.utils.ChatUtils;
 import ru.deelter.chat.utils.GlobalChatPayload;
-import ru.deelter.chat.utils.LangTag;
-import ru.deelter.chat.utils.PlayerLanguageUtil;
+import ru.deelter.chat.language.LangTag;
 import ru.deelter.chat.utils.translator.OnlineTranslator;
 import ru.deelter.chat.utils.translator.TranslationLanguage;
 
@@ -91,7 +90,7 @@ public class GlobalMessageListener implements PluginMessageListener {
 
 			for (Player player : players) {
 				if (!player.isOnline()) continue;
-				Locale locale = PlayerLanguageUtil.getLocale(player);
+				Locale locale = BetterChat.getInstance().getLanguageManager().getLocale(player);
 
 				Component messageComponent = messageByLocale.computeIfAbsent(locale, loc -> {
 					if (!translationEnabled || senderLocale.equals(loc)) {

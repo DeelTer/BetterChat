@@ -14,5 +14,5 @@ commands:
     aliases: [ chatting ]
     usage: /chat <text>
   lang:
-    usage: /lang <language_code>
+    usage: /lang
     description: Set your chat language

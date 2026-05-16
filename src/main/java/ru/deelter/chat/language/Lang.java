@@ -1,4 +1,4 @@
-package ru.deelter.chat.utils;
+package ru.deelter.chat.language;
 
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
@@ -9,6 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 import ru.deelter.chat.bukkit.BetterChat;
 
 import java.io.File;
@@ -104,11 +105,23 @@ public class Lang {
 		if (!autoDetect || player == null) {
 			return defaultLanguage;
 		}
-		Locale locale = PlayerLanguageUtil.getLocale(player);
+		Locale locale = BetterChat.getInstance().getLanguageManager().getLocale(player);
 		String shortLang = locale.toString().split("_")[0].toLowerCase();
 		if (languageMessages.containsKey(shortLang)) {
 			return shortLang;
 		}
 		return defaultLanguage;
+	}
+
+	@Nullable
+	public Component getMessage(String key, @Nullable CommandSender sender, String @NonNull ... placeholders) {
+		if (placeholders.length % 2 != 0) {
+			throw new IllegalArgumentException("Placeholders must be key-value pairs");
+		}
+		TagResolver[] resolvers = new TagResolver[placeholders.length / 2];
+		for (int i = 0; i < placeholders.length; i += 2) {
+			resolvers[i / 2] = Placeholder.unparsed(placeholders[i], placeholders[i + 1]);
+		}
+		return getMessage(key, sender, resolvers);
 	}
 }

@@ -1,13 +1,44 @@
 # BetterChat Russian localization
 messages:
-  lang-set: "<color:#FFD700>BetterChat</color> <#C7B9A6>Язык изменён на <lang>."
-  links-open: "Нажмите, чтобы открыть ссылку"
-  chat-copy: "Нажмите, чтобы скопировать"
-  chat-hide: "Нажмите, чтобы показать"
-  chat-command: "Нажмите, чтобы выполнить команду"
-  chat-say: "Нажмите, чтобы сказать"
-  empty-audience: "<red>Никто не услышал ваше сообщение"
-  anti-spam-blocked: "<red>Слишком похоже на предыдущее сообщение"
+  # Plugin messages
+  lang-set: "<color:#FFD700>BetterChat</color> <#C7B9A6>Язык изменён на <lang>"
+  links-open: "<color:#FFD700>Нажмите, чтобы открыть ссылку</color>"
+  chat-copy: "<color:#FFD700>Нажмите, чтобы скопировать</color>"
+  chat-hide: "<color:#FFD700>Нажмите, чтобы показать</color>"
+  chat-command: "<color:#FFD700>Нажмите, чтобы выполнить команду</color>"
+  chat-say: "<color:#FFD700>Нажмите, чтобы сказать</color>"
+  empty-audience: "<red>Никто не услышал ваше сообщение</red>"
+  anti-spam-blocked: "<red>Слишком похоже на предыдущее сообщение</red>"
   global: "ГЛОБАЛЬНЫЙ"
   trade: "ОБМЕН"
   underwater-chat: "*буль-буль*"
+
+  # Language command messages
+  lang-player-only: "<red>Эту команду могут использовать только игроки.</red>"
+  lang-help-text: |
+    <color:#FFD700>=== Команды языковой системы ===</color>
+    <color:#FFD700>/lang understand <язык1> [язык2...]</color> <#C7B9A6>- языки, которые вы понимаете (без перевода)</#C7B9A6>
+    <color:#FFD700>/lang speak <язык></color> <#C7B9A6>- язык, на котором вы говорите (переопределяет язык клиента)</#C7B9A6>
+    <color:#FFD700>/lang primary <язык|auto></color> <#C7B9A6>- основной язык для перевода</#C7B9A6>
+    <color:#FFD700>/lang toggle</color> <#C7B9A6>- переключить отображение (перевод ↔ оригинал)</#C7B9A6>
+    <color:#FFD700>/lang info</color> <#C7B9A6>- показать текущие настройки</#C7B9A6>
+    <color:#FFD700>/lang reset</color> <#C7B9A6>- сбросить все настройки (язык клиента)</#C7B9A6>
+
+  lang-set-success: "<color:#FFD700>✓ Установлены языки:</color> <#C7B9A6><langs></#C7B9A6>"
+  lang-primary-success: "<color:#FFD700>✓ Основной язык перевода установлен:</color> <#C7B9A6><lang></#C7B9A6>"
+  lang-speak-success: "<color:#FFD700>✓ Теперь вы говорите на языке:</color> <#C7B9A6><lang></#C7B9A6>"
+  lang-toggle-on: "<color:#FFD700>✓ Режим:</color> <#C7B9A6>ОРИГИНАЛ (перевод при наведении)</#C7B9A6>"
+  lang-toggle-off: "<color:#FFD700>✓ Режим:</color> <#C7B9A6>ПЕРЕВОД (оригинал при наведении)</#C7B9A6>"
+  lang-info-known: "<color:#FFD700>Известные языки:</color> <#C7B9A6><langs></#C7B9A6>"
+  lang-info-primary: "<color:#FFD700>Основной перевод:</color> <#C7B9A6><primary></#C7B9A6>"
+  lang-info-toggle: "<color:#FFD700>Режим отображения:</color> <#C7B9A6><mode></#C7B9A6>"
+  lang-reset-success: "<color:#FFD700>✓ Настройки языка сброшены (используется язык клиента).</color>"
+
+  lang-understand-reset: "<color:#FFD700>✓ Список известных языков сброшен (все сообщения будут переводиться на primary)</color>"
+  lang-speak-reset: "<color:#FFD700>✓ Теперь вы говорите на языке клиента (настройка speak сброшена)</color>"
+  lang-primary-reset: "<color:#FFD700>✓ Основной язык перевода сброшен в auto (первый из known или язык клиента)</color>"
+
+  lang-usage-set: "<red>Использование: /lang understand <язык1> [язык2...]</red>"
+  lang-usage-primary: "<red>Использование: /lang primary <язык|auto></red>"
+  lang-usage-speak: "<red>Использование: /lang speak <язык></red>"
+  lang-invalid-language: "<red>Неверный(е) код(ы) языка:</red> <color:#FFD700><code></color>"

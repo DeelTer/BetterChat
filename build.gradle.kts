@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "ru.deelter"
-version = "1.0.1"
+version = "1.1.0"
 description = "Advanced chat system with bubbles, effects, and cross-server messaging"
 
 repositories {
@@ -25,6 +25,10 @@ dependencies {
     implementation("org.bstats:bstats-bukkit:3.0.2")
     implementation("com.github.ben-manes.caffeine:caffeine:3.1.8")
     implementation("org.apache.commons:commons-text:1.12.0")
+
+    implementation("com.zaxxer:HikariCP:5.1.0")
+    implementation("com.h2database:h2:2.2.224")
+    compileOnly("org.xerial:sqlite-jdbc:3.46.1.0")
 }
 
 java {
@@ -44,26 +48,23 @@ tasks {
         options.encoding = "UTF-8"
     }
 
-    jar {
-        enabled = true
-        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-        manifest {
-            attributes["Main-Class"] = "ru.deelter.chat.bukkit.BetterChat"
-        }
-    }
-
     shadowJar {
         archiveClassifier.set("")
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
         relocate("org.bstats", "${project.group}.shaded.bstats")
         relocate("com.github.benmanes.caffeine", "${project.group}.shaded.caffeine")
-        relocate("org.apache.commons.text", "${project.group}.shaded.commons.text")
-        relocate("org.apache.commons.lang3", "${project.group}.shaded.commons.lang3")
+//        relocate("org.apache.commons.text", "${project.group}.shaded.commons.text")
+//        relocate("org.apache.commons.lang3", "${project.group}.shaded.commons.lang3")
 
         exclude("META-INF/maven/**")
         exclude("META-INF/versions/**")
         exclude("META-INF/services/**")
+        exclude("META-INF/*.SF", "META-INF/*.DSA", "META-INF/*.RSA")
+        exclude("**/module-info.class")
+
+        exclude("**/*.dll")
+        exclude("**/*.dylib")
     }
 
     assemble {

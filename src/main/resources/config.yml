@@ -40,6 +40,17 @@ language:
   # Translated messages show original text on hover
   translation: true
 
+language-storage:
+  # Type: PDC (default), MYSQL, SQLITE, H2
+  type: H2
+  # MySQL settings (used if type = MYSQL)
+  mysql:
+    host: localhost
+    port: 3306
+    database: betterchat
+    user: root
+    password: ""
+
 # -----------------------------------------------------------------
 # bStats metrics collection
 # -----------------------------------------------------------------

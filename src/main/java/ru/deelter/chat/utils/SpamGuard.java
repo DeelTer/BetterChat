@@ -1,4 +1,4 @@
-package ru.deelter.chat.antispam;
+package ru.deelter.chat.utils;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;

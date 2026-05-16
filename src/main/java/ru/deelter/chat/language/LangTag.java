@@ -1,4 +1,4 @@
-package ru.deelter.chat.utils;
+package ru.deelter.chat.language;
 
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
@@ -16,15 +16,12 @@ public final class LangTag {
 	public static @NotNull TagResolver resolver() {
 		return TagResolver.resolver("lang", (argumentQueue, context) -> {
 			if (!argumentQueue.hasNext()) return Tag.selfClosingInserting(Component.text("lang"));
-			String key = argumentQueue.pop().value();
 
-			// Узнаём игрока из контекста, если возможно
+			String key = argumentQueue.pop().value();
 			if (context instanceof Audience audience && audience instanceof CommandSender commandSender) {
 				Component translated = BetterChat.getInstance().getLang().getMessage(key, commandSender);
 				if (translated != null) return Tag.selfClosingInserting(translated);
 			}
-
-			// Фолбэк без игрока
 			Component translated = BetterChat.getInstance().getLang().getMessage(key, null);
 			return Tag.selfClosingInserting(translated != null ? translated : Component.text(key));
 		});

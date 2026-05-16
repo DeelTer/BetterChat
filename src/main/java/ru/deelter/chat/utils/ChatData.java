@@ -90,7 +90,7 @@ public class ChatData {
 			builder.name(player.displayName())
 					.deepSleeping(player.isDeeplySleeping())
 					.spectating(player.getGameMode() == GameMode.SPECTATOR)
-					.locale(PlayerLanguageUtil.getLocale(player));
+					.locale(BetterChat.getInstance().getLanguageManager().getLocale(player));
 		}
 		return builder.build();
 	}
@@ -100,7 +100,7 @@ public class ChatData {
 		return ChatData.builder()
 				.entity(player)
 				.name(player.displayName())
-				.locale(PlayerLanguageUtil.getLocale(player))
+				.locale(BetterChat.getInstance().getLanguageManager().getLocale(player))
 				.underwater(player.isUnderWater())
 				.location(player.getLocation())
 				.darkness(player.getEyeLocation().getBlock().getLightLevel() < 2.0)

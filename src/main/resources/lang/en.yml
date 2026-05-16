@@ -1,13 +1,44 @@
 # BetterChat English localization
 messages:
-  lang-set: "<color:#FFD700>BetterChat</color> <#C7B9A6>Language set to <lang>."
-  links-open: "Click to open link"
-  chat-copy: "Click to copy"
-  chat-hide: "Click to reveal"
-  chat-command: "Click to run command"
-  chat-say: "Click to say"
+  # Plugin messages
+  lang-set: "<color:#FFD700>BetterChat</color> <#C7B9A6>Language set to <lang>"
+  links-open: "<color:#FFD700>Click to open link</color>"
+  chat-copy: "<color:#FFD700>Click to copy</color>"
+  chat-hide: "<color:#FFD700>Click to reveal</color>"
+  chat-command: "<color:#FFD700>Click to run command</color>"
+  chat-say: "<color:#FFD700>Click to say</color>"
+  empty-audience: "<red>Nobody heard your message</red>"
+  anti-spam-blocked: "<red>Too similar to your previous message</red>"
   global: "GLOBAL"
   trade: "TRADE"
   underwater-chat: "*bul-bul*"
-  empty-audience: "<red>Nobody heard your message"
-  anti-spam-blocked: "<red>Too similar to your previous message"
+
+  # Language command messages
+  lang-player-only: "<red>Only players can use this command.</red>"
+  lang-help-text: |
+    <color:#FFD700>=== Language Commands ===</color>
+    <color:#FFD700>/lang understand <lang1> [lang2...]</color> <#C7B9A6>- set languages you understand (no translation)</#C7B9A6>
+    <color:#FFD700>/lang speak <language></color> <#C7B9A6>- set the language you speak (overrides client language)</#C7B9A6>
+    <color:#FFD700>/lang primary <language|auto></color> <#C7B9A6>- set main language for translation</#C7B9A6>
+    <color:#FFD700>/lang toggle</color> <#C7B9A6>- switch between translation/original as main</#C7B9A6>
+    <color:#FFD700>/lang info</color> <#C7B9A6>- show current settings</#C7B9A6>
+    <color:#FFD700>/lang reset</color> <#C7B9A6>- reset all preferences (client locale)</#C7B9A6>
+
+  lang-set-success: "<color:#FFD700>✓ Known languages set to:</color> <#C7B9A6><langs></#C7B9A6>"
+  lang-primary-success: "<color:#FFD700>✓ Primary translation language set to</color> <#C7B9A6><lang></#C7B9A6>"
+  lang-speak-success: "<color:#FFD700>✓ You will now speak in:</color> <#C7B9A6><lang></#C7B9A6>"
+  lang-toggle-on: "<color:#FFD700>✓ Toggle mode:</color> <#C7B9A6>ON (original message shown first)</#C7B9A6>"
+  lang-toggle-off: "<color:#FFD700>✓ Toggle mode:</color> <#C7B9A6>OFF (translation shown first)</#C7B9A6>"
+  lang-info-known: "<color:#FFD700>Known languages:</color> <#C7B9A6><langs></#C7B9A6>"
+  lang-info-primary: "<color:#FFD700>Primary translation:</color> <#C7B9A6><primary></#C7B9A6>"
+  lang-info-toggle: "<color:#FFD700>Toggle mode:</color> <#C7B9A6><mode></#C7B9A6>"
+  lang-reset-success: "<color:#FFD700>✓ All language preferences reset to default (client locale).</color>"
+
+  lang-understand-reset: "<color:#FFD700>✓ Known languages reset to empty (all messages will be translated to primary)</color>"
+  lang-speak-reset: "<color:#FFD700>✓ You will now speak your client's language (custom speak language cleared)</color>"
+  lang-primary-reset: "<color:#FFD700>✓ Primary translation language reset to auto (first known or client locale)</color>"
+
+  lang-usage-set: "<red>Usage: /lang understand <lang1> [lang2...]</red>"
+  lang-usage-primary: "<red>Usage: /lang primary <language|auto></red>"
+  lang-usage-speak: "<red>Usage: /lang speak <language></red>"
+  lang-invalid-language: "<red>Invalid language code(s):</red> <color:#FFD700><code></color>"

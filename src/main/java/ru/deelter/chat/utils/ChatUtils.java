@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.Messenger;
 import org.jetbrains.annotations.NotNull;
 import ru.deelter.chat.bukkit.BetterChat;
+import ru.deelter.chat.language.LanguageManager;
 import ru.deelter.chat.utils.translator.OnlineTranslator;
 import ru.deelter.chat.utils.translator.TranslationLanguage;
 
@@ -60,15 +61,8 @@ public class ChatUtils {
 		if (!BetterChat.getInstance().getLang().isTranslationEnabled()) return message;
 		if (!(audience instanceof Player receiver)) return message;
 
-		Locale receiverLocale = PlayerLanguageUtil.getLocale(receiver);
-		if (originalLocale.equals(receiverLocale)) return message;
-
-		String translated = OnlineTranslator.translate(
-				PlainTextComponentSerializer.plainText().serialize(message),
-				TranslationLanguage.AUTO,
-				TranslationLanguage.from(receiverLocale)
-		);
-		return Component.text(translated).hoverEvent(HoverEvent.showText(message));
+		LanguageManager languageManager = BetterChat.getInstance().getLanguageManager();
+		return languageManager.processTranslation(message, originalLocale, receiver);
 	}
 
 	public static void sendGlobal(@NotNull ChatData data, String routing) {

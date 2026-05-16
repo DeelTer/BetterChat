@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import ru.deelter.chat.bukkit.BetterChat;
 import ru.deelter.chat.processors.AbstractChatProcessor;
 import ru.deelter.chat.utils.ChatData;
-import ru.deelter.chat.utils.Lang;
+import ru.deelter.chat.language.Lang;
 
 public class EmptyAudienceProcessor extends AbstractChatProcessor {
 

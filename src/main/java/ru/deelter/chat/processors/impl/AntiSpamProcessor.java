@@ -4,7 +4,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import ru.deelter.chat.antispam.SpamGuard;
+import ru.deelter.chat.utils.SpamGuard;
 import ru.deelter.chat.bukkit.BetterChat;
 import ru.deelter.chat.config.AntiSpamConfig;
 import ru.deelter.chat.processors.AbstractChatProcessor;
