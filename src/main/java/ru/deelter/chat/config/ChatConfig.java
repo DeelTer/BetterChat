@@ -22,7 +22,7 @@ public final class ChatConfig {
 	public static void init(FileConfiguration configuration) {
 		config = configuration;
 
-		defaultRadius = config.getDouble("chat.default-radius", 50.0);
+		defaultRadius = config.getDouble("chat.default-radius", 64.0);
 		caveRadius = config.getDouble("chat.cave-radius", 256.0);
 
 		formatDefault = getString("chat.formats.default", "<prefix><color1><sender><suffix>:</color1> <color2><message></color2>");

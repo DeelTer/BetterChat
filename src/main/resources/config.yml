@@ -134,6 +134,8 @@ bubbles:
 # Chat format and color settings
 # -----------------------------------------------------------------
 chat:
+  default-radius: 64
+  cave-radius: 200
   # Message format templates
   # Available placeholders: <prefix>, <suffix>, <sender>, <message>, <color1>, <color2>
   formats:
@@ -201,7 +203,21 @@ tags:
       mode: blacklist
       servers:
         - testserver
+    # Example: global tag with discord webhook sending
+    discord-staff:
+      symbol: "!ds"
+      permission: "discord.staff"
+      radius: -1
+      format: "<color:#525252>[Discord]</color> <prefix><color1><sender><suffix>:</color1> <color2><message></color2>"
+      discord-webhook: "YOUR_URL_HERE"
 
+# -----------------------------------------------------------------
+# Discord webhook integration
+# -----------------------------------------------------------------
+discord:
+  default-webhook: "YOUR_URL_HERE"
+  # Parameter %s - UUID or Player name
+  skin-api: "https://api.mcheads.org/ioshead/%s/right/256"
 # -----------------------------------------------------------------
 # Velocity cross-server settings
 # -----------------------------------------------------------------
