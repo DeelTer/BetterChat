@@ -76,11 +76,15 @@ public class GlobalMessageListener implements PluginMessageListener {
 	}
 
 	/**
-	 * Recursively walks the Component tree and replaces the sentinel text node with the actual message.
+	 * Recursively walks the Component tree and replaces the sentinel text node with the actual message,
+	 * preserving styling (color, decorations, font) from the sentinel.
 	 */
 	private static @NotNull Component injectMessage(@NotNull Component component, @NotNull Component message) {
 		if (component instanceof TextComponent tc && GlobalChatPayload.SENTINEL.equals(tc.content())) {
-			return message;
+			return message
+					.color(component.color())
+					.decorations(component.decorations())
+					.font(component.font());
 		}
 		List<Component> children = component.children();
 		if (children.isEmpty()) return component;
