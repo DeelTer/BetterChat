@@ -29,12 +29,13 @@ public class GlobalMessageListener implements PluginMessageListener {
 	private static final int DEFAULT_COLOR = 16777215;
 
 	/**
-	 * Restricted MiniMessage for cross-server format parsing.
-	 * Excludes &lt;click&gt; tag — prevents a malicious peer server from injecting
-	 * commands that execute when receiver clicks on the message.
+	 * MiniMessage for cross-server format parsing.
+	 * Allows <click> in the format string (server config, not user input).
+	 * User-controlled components (prefix/suffix/sender/text) are sanitized via sanitize() before use.
 	 */
 	private static final MiniMessage SAFE_MM = MiniMessage.builder()
 			.tags(TagResolver.builder()
+					.resolver(StandardTags.clickEvent())
 					.resolver(StandardTags.color())
 					.resolver(StandardTags.decorations())
 					.resolver(StandardTags.font())
@@ -86,24 +87,27 @@ public class GlobalMessageListener implements PluginMessageListener {
 					? PlainTextComponentSerializer.plainText().serialize(originalText)
 					: null;
 
-			// Cache translated message per locale — one HTTP call per unique locale, not per player
+			// Cache translated message per target locale — one HTTP call per unique target, not per player
 			Map<Locale, Component> messageByLocale = new HashMap<>();
 
 			for (Player player : players) {
 				if (!player.isOnline()) continue;
-				Locale locale = BetterChat.getInstance().getLanguageManager().getLocale(player);
+				var langManager = BetterChat.getInstance().getLanguageManager();
 
-				Component messageComponent = messageByLocale.computeIfAbsent(locale, loc -> {
-					if (!translationEnabled || senderLocale.equals(loc)) {
-						return originalText;
-					}
-					String translated = OnlineTranslator.translate(
-							originalPlain,
-							TranslationLanguage.AUTO,
-							TranslationLanguage.from(loc)
-					);
-					return Component.text(translated).hoverEvent(HoverEvent.showText(originalText));
-				});
+				Component messageComponent;
+				if (!translationEnabled || !langManager.shouldTranslate(senderLocale, player)) {
+					messageComponent = originalText;
+				} else {
+					Locale targetLocale = langManager.getTargetTranslationLocale(player);
+					messageComponent = messageByLocale.computeIfAbsent(targetLocale, loc -> {
+						String translated = OnlineTranslator.translate(
+								originalPlain,
+								TranslationLanguage.AUTO,
+								TranslationLanguage.from(loc)
+						);
+						return Component.text(translated).hoverEvent(HoverEvent.showText(originalText));
+					});
+				}
 
 				Component rendered = SAFE_MM.deserialize(
 						format,
