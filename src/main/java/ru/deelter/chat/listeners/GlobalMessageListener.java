@@ -16,6 +16,7 @@ import org.jspecify.annotations.NonNull;
 import ru.deelter.chat.bukkit.BetterChat;
 import ru.deelter.chat.utils.ChatUtils;
 import ru.deelter.chat.utils.GlobalChatPayload;
+import ru.deelter.chat.utils.MiniPlaceholdersHook;
 import ru.deelter.chat.language.LangTag;
 import ru.deelter.chat.utils.translator.OnlineTranslator;
 import ru.deelter.chat.utils.translator.TranslationLanguage;
@@ -106,13 +107,15 @@ public class GlobalMessageListener implements PluginMessageListener {
 
 				Component rendered = SAFE_MM.deserialize(
 						format,
+						player,
 						LangTag.resolver(),
 						Placeholder.component("prefix", prefix),
 						Placeholder.component("suffix", suffix),
 						Placeholder.component("sender", sender),
 						Placeholder.component("message", messageComponent),
 						Placeholder.styling("color1", color1),
-						Placeholder.styling("color2", color2)
+						Placeholder.styling("color2", color2),
+						MiniPlaceholdersHook.resolver()
 				);
 
 				player.sendMessage(rendered);

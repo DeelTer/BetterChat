@@ -18,6 +18,7 @@ import ru.deelter.chat.processors.ChatProcessorRegistry;
 import ru.deelter.chat.replacer.ChatLink;
 import ru.deelter.chat.tags.ChatTagRegistry;
 import ru.deelter.chat.utils.ChatUtils;
+import ru.deelter.chat.utils.MiniPlaceholdersHook;
 import ru.deelter.chat.language.Lang;
 
 @Getter
@@ -73,6 +74,7 @@ public final class BetterChat extends JavaPlugin {
 		if (chatCommand != null) {
 			chatCommand.setExecutor(new ChatCommand());
 		}
+		MiniPlaceholdersHook.init(getServer().getPluginManager().isPluginEnabled("MiniPlaceholders"));
 		MetricsSetup.init(this);
 	}
 

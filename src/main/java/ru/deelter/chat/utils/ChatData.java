@@ -167,18 +167,21 @@ public class ChatData {
 	}
 
 	public void send(@NotNull Collection<Audience> audiences) {
+		Audience senderAudience = entity != null ? entity : Audience.empty();
 		audiences.forEach(audience -> {
 			Component text = getText();
 			text = ChatUtils.translate(locale, audience, text);
 			Component rendered = MiniMessage.miniMessage()
 					.deserialize(
 							getFormat(),
+							senderAudience,
 							Placeholder.component("prefix", getPrefix()),
 							Placeholder.component("suffix", getSuffix()),
 							Placeholder.component("sender", getName()),
 							Placeholder.component("message", text),
 							Placeholder.styling("color1", getColor()),
-							Placeholder.styling("color2", getColor2())
+							Placeholder.styling("color2", getColor2()),
+							MiniPlaceholdersHook.resolver()
 					);
 			audience.sendMessage(rendered);
 		});

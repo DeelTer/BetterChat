@@ -6,13 +6,15 @@ plugins {
 }
 
 group = "ru.deelter"
-version = "1.1.0"
+version = "1.2.0"
 description = "Advanced chat system with bubbles, effects, and cross-server messaging"
 
 repositories {
     mavenCentral()
     maven("https://repo.papermc.io/repository/maven-public/")
-    maven("https://repo.velocitypowered.com/snapshots/")
+    maven("https://repo.velocitypowered.com/snapshots/") {
+        content { includeGroup("com.velocitypowered") }
+    }
 }
 
 dependencies {
@@ -21,6 +23,7 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok:1.18.38")
     compileOnly("com.velocitypowered:velocity-api:3.3.0-SNAPSHOT")
     annotationProcessor("com.velocitypowered:velocity-api:3.3.0-SNAPSHOT")
+    compileOnly("io.github.miniplaceholders:miniplaceholders-api:3.2.0")
 
     implementation("org.bstats:bstats-bukkit:3.0.2")
     implementation("com.github.ben-manes.caffeine:caffeine:3.1.8")
@@ -28,11 +31,12 @@ dependencies {
 
     implementation("com.zaxxer:HikariCP:5.1.0")
     implementation("com.h2database:h2:2.2.224")
+
     compileOnly("org.xerial:sqlite-jdbc:3.46.1.0")
 }
 
 java {
-    toolchain.languageVersion = JavaLanguageVersion.of(22)
+    toolchain.languageVersion = JavaLanguageVersion.of(25)
 }
 
 tasks {

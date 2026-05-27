@@ -6,6 +6,7 @@ main: ru.deelter.chat.bukkit.BetterChat
 api-version: '1.21'
 load: POSTWORLD
 
+softdepend: [ MiniPlaceholders ]
 authors: [ DeelTer ]
 website: https://deelter.ru
 

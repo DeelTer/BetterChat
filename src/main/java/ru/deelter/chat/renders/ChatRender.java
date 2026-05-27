@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import ru.deelter.chat.bukkit.BetterChat;
 import ru.deelter.chat.language.LanguageManager;
 import ru.deelter.chat.utils.ChatData;
+import ru.deelter.chat.utils.MiniPlaceholdersHook;
 import ru.deelter.chat.language.LangTag;
 
 import java.util.Locale;
@@ -33,13 +34,15 @@ public class ChatRender implements ChatRenderer {
 
 		return MiniMessage.miniMessage().deserialize(
 				data.getFormat(),
+				player,
 				LangTag.resolver(),
 				Placeholder.component("prefix", data.getPrefix()),
 				Placeholder.component("suffix", data.getSuffix()),
 				Placeholder.component("sender", data.getName()),
 				Placeholder.component("message", text),
 				Placeholder.styling("color1", data.getColor()),
-				Placeholder.styling("color2", data.getColor2())
+				Placeholder.styling("color2", data.getColor2()),
+				MiniPlaceholdersHook.resolver()
 		);
 	}
 }
