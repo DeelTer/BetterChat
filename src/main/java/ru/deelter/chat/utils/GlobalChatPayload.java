@@ -18,27 +18,12 @@ public class GlobalChatPayload {
 			.apply(new GsonBuilder())
 			.create();
 
-	private String locale;
-	private String format;
-	private String color1;
-	private String color2;
-	private Component prefix;
-	private Component suffix;
-	private Component sender;
-	private Component text;
+	/** Unique sentinel marking where the translated message should be inserted in the frame. */
+	public static final String SENTINEL = "BETTERCHAT_MSG";
 
-	public static @NotNull GlobalChatPayload from(@NotNull ChatData data) {
-		return new GlobalChatPayload(
-				data.getLocale() != null ? data.getLocale().toLanguageTag() : "en",
-				data.getFormat() != null ? data.getFormat() : "",
-				data.getColor() != null ? data.getColor().asHexString() : "#ffffff",
-				data.getColor2() != null ? data.getColor2().asHexString() : "#ffffff",
-				data.getPrefix() != null ? data.getPrefix() : Component.empty(),
-				data.getSuffix() != null ? data.getSuffix() : Component.empty(),
-				data.getName() != null ? data.getName() : Component.empty(),
-				data.getText() != null ? data.getText() : Component.empty()
-		);
-	}
+	private String locale;
+	private Component frame;
+	private Component text;
 
 	public @NotNull String toJson() {
 		return GSON.toJson(this);

@@ -1,12 +1,8 @@
 package ru.deelter.chat.listeners;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.HoverEvent;
-import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
-import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import net.kyori.adventure.text.minimessage.tag.standard.StandardTags;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -16,8 +12,6 @@ import org.jspecify.annotations.NonNull;
 import ru.deelter.chat.bukkit.BetterChat;
 import ru.deelter.chat.utils.ChatUtils;
 import ru.deelter.chat.utils.GlobalChatPayload;
-import ru.deelter.chat.utils.MiniPlaceholdersHook;
-import ru.deelter.chat.language.LangTag;
 import ru.deelter.chat.utils.translator.OnlineTranslator;
 import ru.deelter.chat.utils.translator.TranslationLanguage;
 
@@ -25,33 +19,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class GlobalMessageListener implements PluginMessageListener {
-
-	private static final int DEFAULT_COLOR = 16777215;
-
-	/**
-	 * MiniMessage for cross-server format parsing.
-	 * Allows <click> in the format string (server config, not user input).
-	 * User-controlled components (prefix/suffix/sender/text) are sanitized via sanitize() before use.
-	 */
-	private static final MiniMessage SAFE_MM = MiniMessage.builder()
-			.tags(TagResolver.builder()
-					.resolver(StandardTags.clickEvent())
-					.resolver(StandardTags.color())
-					.resolver(StandardTags.decorations())
-					.resolver(StandardTags.font())
-					.resolver(StandardTags.gradient())
-					.resolver(StandardTags.hoverEvent())
-					.resolver(StandardTags.insertion())
-					.resolver(StandardTags.keybind())
-					.resolver(StandardTags.newline())
-					.resolver(StandardTags.rainbow())
-					.resolver(StandardTags.reset())
-					.resolver(StandardTags.score())
-					.resolver(StandardTags.selector())
-					.resolver(StandardTags.transition())
-					.resolver(StandardTags.translatable())
-					.build())
-			.build();
 
 	@Override
 	public void onPluginMessageReceived(@NotNull String channel, @NotNull Player receiver, byte @NonNull [] message) {
@@ -70,15 +37,9 @@ public class GlobalMessageListener implements PluginMessageListener {
 		}
 
 		final Locale senderLocale = Locale.forLanguageTag(payload.getLocale() != null ? payload.getLocale() : "en");
-		final TextColor color1 = parseColor(payload.getColor1());
-		final TextColor color2 = parseColor(payload.getColor2());
-		final String format = payload.getFormat() != null ? payload.getFormat() : "<message>";
-		final Component prefix = sanitize(payload.getPrefix() != null ? payload.getPrefix() : Component.empty());
-		final Component suffix = sanitize(payload.getSuffix() != null ? payload.getSuffix() : Component.empty());
-		final Component sender = sanitize(payload.getSender() != null ? payload.getSender() : Component.empty());
+		final Component frame = payload.getFrame() != null ? payload.getFrame() : Component.empty();
 		final Component originalText = sanitize(payload.getText() != null ? payload.getText() : Component.empty());
 
-		// Snapshot players on main thread — can't iterate online players from async safely
 		final List<Player> players = new ArrayList<>(Bukkit.getOnlinePlayers());
 
 		Bukkit.getScheduler().runTaskAsynchronously(BetterChat.getInstance(), () -> {
@@ -109,34 +70,32 @@ public class GlobalMessageListener implements PluginMessageListener {
 					});
 				}
 
-				Component rendered = SAFE_MM.deserialize(
-						format,
-						player,
-						LangTag.resolver(),
-						Placeholder.component("prefix", prefix),
-						Placeholder.component("suffix", suffix),
-						Placeholder.component("sender", sender),
-						Placeholder.component("message", messageComponent),
-						Placeholder.styling("color1", color1),
-						Placeholder.styling("color2", color2),
-						MiniPlaceholdersHook.resolver()
-				);
-
-				player.sendMessage(rendered);
+				player.sendMessage(injectMessage(frame, messageComponent));
 			}
 		});
 	}
 
-	private static @NotNull TextColor parseColor(String hex) {
-		if (hex == null) return TextColor.color(DEFAULT_COLOR);
-		TextColor textColor = TextColor.fromHexString(hex);
-		return textColor != null ? textColor : TextColor.color(DEFAULT_COLOR);
+	/**
+	 * Recursively walks the Component tree and replaces the sentinel text node with the actual message.
+	 */
+	private static @NotNull Component injectMessage(@NotNull Component component, @NotNull Component message) {
+		if (component instanceof TextComponent tc && GlobalChatPayload.SENTINEL.equals(tc.content())) {
+			return message;
+		}
+		List<Component> children = component.children();
+		if (children.isEmpty()) return component;
+
+		List<Component> newChildren = new ArrayList<>(children.size());
+		for (Component child : children) {
+			newChildren.add(injectMessage(child, message));
+		}
+		return component.children(newChildren);
 	}
 
 	/**
 	 * Recursively strips clickEvent from a Component tree.
 	 * Defends against a malicious peer server embedding runCommand click events
-	 * directly into prefix/suffix/sender/text Components via Gson.
+	 * directly into the text Component via Gson.
 	 */
 	private static @NotNull Component sanitize(@NotNull Component component) {
 		Component stripped = component.clickEvent(null);
