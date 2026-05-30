@@ -1,6 +1,7 @@
 package ru.deelter.chat.listeners;
 
 import io.papermc.paper.event.player.AsyncChatEvent;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -16,6 +17,9 @@ import ru.deelter.chat.utils.ChatData;
 import java.util.stream.Collectors;
 
 public class PlayerMessageListener implements Listener {
+
+	private static final PlainTextComponentSerializer PLAIN_TEXT_COMPONENT_SERIALIZER = PlainTextComponentSerializer.plainText();
+
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void onChat(@NotNull AsyncChatEvent event) {
 		ChatData data = ChatData.fromAsyncEvent(event);
@@ -27,6 +31,7 @@ public class PlayerMessageListener implements Listener {
 				.collect(Collectors.toSet()));
 		data.sendBubbles();
 		event.renderer(new ChatRender(data));
+		BetterChat.getInstance().getLogger().info(event.getPlayer().getName() + ": " + PLAIN_TEXT_COMPONENT_SERIALIZER.serialize(event.message()));
 	}
 
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
