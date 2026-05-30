@@ -258,6 +258,46 @@ anti-spam:
   recent-messages-count: 5
 
 # -----------------------------------------------------------------
+# Join / quit messages
+# -----------------------------------------------------------------
+# Messages are taken from lang files (keys: "join" and "quit").
+# Edit them per-language in plugins/BetterChat/lang/en.yml etc.
+# MiniMessage + MiniPlaceholders supported (context = joining/leaving player).
+join-quit:
+  # Show join/quit messages at all
+  enabled: true
+  # true = send to actionbar instead of chat
+  use-actionbar: false
+  # Sent only on the very first join (lang key: "welcome")
+  welcome:
+    enabled: true
+    sound: "block.note_block.chime"
+  # Sent every time the player joins (lang key: "welcome-back")
+  welcome-back:
+    enabled: true
+    sound: ""
+
+# -----------------------------------------------------------------
+# Broadcast messages — sent to all online players on a timer
+# -----------------------------------------------------------------
+# "text" is a lang key (see lang/en.yml etc.).
+# If the key is not found in any lang file, it is used as a raw MiniMessage string.
+# Each recipient gets the message in their own language.
+broadcast:
+  enabled: false
+  # Interval in ticks (20 ticks = 1 second). Default: 6000 = 5 minutes
+  interval-ticks: 6000
+  # true = pick random message each tick; false = cycle in order
+  random: false
+  messages:
+    1:
+      text: "broadcast-welcome"
+      sound: "block.note_block.chime"
+    2:
+      text: "broadcast-shop"
+      sound: ""
+
+# -----------------------------------------------------------------
 # Link detection - services get custom colors and icons
 # -----------------------------------------------------------------
 links:

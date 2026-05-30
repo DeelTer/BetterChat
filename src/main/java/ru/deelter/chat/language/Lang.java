@@ -88,6 +88,10 @@ public class Lang {
 		return getMessage(key, sender, Placeholder.unparsed(placeholderKey, value));
 	}
 
+	public String getRaw(String key, @Nullable Player player) {
+		return resolveRawMessage(key, player);
+	}
+
 	private String resolveRawMessage(String key, Player player) {
 		String lang = resolvePlayerLanguage(player);
 		Map<String, String> messages = languageMessages.get(lang);

@@ -42,3 +42,16 @@ messages:
   lang-usage-primary: "<red>Использование: /lang primary <язык|auto></red>"
   lang-usage-speak: "<red>Использование: /lang speak <язык></red>"
   lang-invalid-language: "<red>Неверный(е) код(ы) языка:</red> <color:#FFD700><code></color>"
+
+  # Сообщения о входе / выходе (MiniMessage, MiniPlaceholders поддерживаются)
+  join: "<gray>[</gray><green>+</green><gray>]</gray> <green><player_name> вошёл на сервер</green>"
+  quit: "<gray>[</gray><red>-</red><gray>]</gray> <red><player_name> покинул сервер</red>"
+
+  # Отправляется только при самом первом входе
+  welcome: "<gold>Добро пожаловать на сервер впервые, <player_name>!</gold>"
+  # Отправляется каждый раз при входе
+  welcome-back: "<yellow>С возвращением, <player_name>!</yellow>"
+
+  # Примеры broadcast сообщений (ключи указываются в секции broadcast в config)
+  broadcast-welcome: "<gold>Добро пожаловать! Напишите /help для справки.</gold>"
+  broadcast-shop: "<aqua>Загляните в наш <white>/shop</white>!</aqua>"

@@ -9,8 +9,10 @@ import ru.deelter.chat.bubbles.BubbleChatListener;
 import ru.deelter.chat.bubbles.BubbleManager;
 import ru.deelter.chat.commands.ChatCommand;
 import ru.deelter.chat.commands.LanguageCommand;
+import ru.deelter.chat.broadcast.BroadcastManager;
 import ru.deelter.chat.config.*;
 import ru.deelter.chat.language.*;
+import ru.deelter.chat.listeners.JoinQuitListener;
 import ru.deelter.chat.listeners.AntiSpamAuthListener;
 import ru.deelter.chat.listeners.GlobalMessageListener;
 import ru.deelter.chat.listeners.PlayerMessageListener;
@@ -49,6 +51,8 @@ public final class BetterChat extends JavaPlugin {
 		BubbleConfig.init(config);
 		MentionConfig.init(config);
 		AntiSpamConfig.init(config);
+		JoinQuitConfig.init(config);
+		BroadcastConfig.init(config);
 
 		ChatLink.load(config);
 		ChatTagRegistry.init();
@@ -63,6 +67,7 @@ public final class BetterChat extends JavaPlugin {
 		Bukkit.getPluginManager().registerEvents(new PlayerMessageListener(), this);
 		Bukkit.getPluginManager().registerEvents(new BubbleChatListener(), this);
 		Bukkit.getPluginManager().registerEvents(new AntiSpamAuthListener(), this);
+		Bukkit.getPluginManager().registerEvents(new JoinQuitListener(), this);
 
 		PluginCommand langCommand = getCommand("lang");
 		if (langCommand != null) {
@@ -75,6 +80,7 @@ public final class BetterChat extends JavaPlugin {
 			chatCommand.setExecutor(new ChatCommand());
 		}
 		MiniPlaceholdersHook.init(getServer().getPluginManager().isPluginEnabled("MiniPlaceholders"));
+		BroadcastManager.start();
 		MetricsSetup.init(this);
 	}
 
@@ -88,6 +94,7 @@ public final class BetterChat extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
+		BroadcastManager.stop();
 		languageManager.shutdown();
 		manager.unload();
 	}
@@ -98,6 +105,9 @@ public final class BetterChat extends JavaPlugin {
 		ChatConfig.init(config);
 		IconProvider.init(config);
 		ChatLink.reload(config);
+		JoinQuitConfig.init(config);
+		BroadcastConfig.init(config);
+		BroadcastManager.start();
 		lang.reload();
 	}
 

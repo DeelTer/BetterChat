@@ -42,3 +42,16 @@ messages:
   lang-usage-primary: "<red>Usage: /lang primary <language|auto></red>"
   lang-usage-speak: "<red>Usage: /lang speak <language></red>"
   lang-invalid-language: "<red>Invalid language code(s):</red> <color:#FFD700><code></color>"
+
+  # Join / quit messages (MiniMessage, MiniPlaceholders supported)
+  join: "<gray>[</gray><green>+</green><gray>]</gray> <green><player_name> joined the game</green>"
+  quit: "<gray>[</gray><red>-</red><gray>]</gray> <red><player_name> left the game</red>"
+
+  # Sent only on first ever join
+  welcome: "<gold>Welcome to the server for the first time, <player_name>!</gold>"
+  # Sent every time player joins
+  welcome-back: "<yellow>Welcome back, <player_name>!</yellow>"
+
+  # Broadcast example messages (referenced by key in config broadcast section)
+  broadcast-welcome: "<gold>Welcome to the server! Type /help for help.</gold>"
+  broadcast-shop: "<aqua>Check out our <white>/shop</white>!</aqua>"
