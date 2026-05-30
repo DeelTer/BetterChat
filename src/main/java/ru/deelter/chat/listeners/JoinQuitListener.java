@@ -19,8 +19,8 @@ public class JoinQuitListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
+        event.joinMessage(null);
         if (JoinQuitConfig.isEnabled()) {
-            event.joinMessage(null);
             broadcast(player, "join");
         }
         sendWelcome(player);
@@ -28,9 +28,10 @@ public class JoinQuitListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onQuit(PlayerQuitEvent event) {
-        if (!JoinQuitConfig.isEnabled()) return;
         event.quitMessage(null);
-        broadcast(event.getPlayer(), "quit");
+        if (JoinQuitConfig.isEnabled()) {
+            broadcast(event.getPlayer(), "quit");
+        }
     }
 
     private void sendWelcome(Player player) {
