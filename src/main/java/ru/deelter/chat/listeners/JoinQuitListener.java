@@ -2,6 +2,8 @@ package ru.deelter.chat.listeners;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -47,7 +49,8 @@ public class JoinQuitListener implements Listener {
 
     private void sendPrivate(Player player, String raw, String sound) {
         if (raw.isEmpty()) return;
-        Component message = MiniMessage.miniMessage().deserialize(raw, player, MiniPlaceholdersHook.resolver());
+        Component message = MiniMessage.miniMessage().deserialize(raw, player,
+                playerName(player), MiniPlaceholdersHook.audienceResolver());
         player.sendMessage(message);
         if (sound != null && !sound.isEmpty()) {
             player.playSound(player.getLocation(), sound, 1f, 1f);
@@ -60,12 +63,17 @@ public class JoinQuitListener implements Listener {
         for (Player online : Bukkit.getOnlinePlayers()) {
             String raw = lang.getRaw(langKey, online);
             if (raw.isEmpty()) continue;
-            Component message = MiniMessage.miniMessage().deserialize(raw, subject, MiniPlaceholdersHook.resolver());
+            Component message = MiniMessage.miniMessage().deserialize(raw, subject,
+                    playerName(subject), MiniPlaceholdersHook.audienceResolver());
             if (actionBar) {
                 online.sendActionBar(message);
             } else {
                 online.sendMessage(message);
             }
         }
+    }
+
+    private TagResolver playerName(Player player) {
+        return Placeholder.unparsed("player_name", player.getName());
     }
 }

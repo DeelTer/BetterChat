@@ -15,9 +15,16 @@ public final class MiniPlaceholdersHook {
         return enabled;
     }
 
+    /** Global placeholders only (no audience context). */
     public static TagResolver resolver() {
         if (!enabled) return TagResolver.empty();
         return MiniPlaceholders.audienceGlobalPlaceholders();
+    }
+
+    /** Global + audience-specific placeholders (e.g. <player_name>). Pass alongside the audience to MiniMessage. */
+    public static TagResolver audienceResolver() {
+        if (!enabled) return TagResolver.empty();
+        return TagResolver.resolver(MiniPlaceholders.audiencePlaceholders(), MiniPlaceholders.audienceGlobalPlaceholders());
     }
 
     private MiniPlaceholdersHook() {}

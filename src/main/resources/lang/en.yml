@@ -44,14 +44,14 @@ messages:
   lang-invalid-language: "<red>Invalid language code(s):</red> <color:#FFD700><code></color>"
 
   # Join / quit messages (MiniMessage, MiniPlaceholders supported)
-  join: "<gray>[</gray><green>+</green><gray>]</gray> <green><player_name> joined the game</green>"
-  quit: "<gray>[</gray><red>-</red><gray>]</gray> <red><player_name> left the game</red>"
+  join: "<color:#FFD700>+<color:#C7B9A6> <player_name>"
+  quit: "<red>-<color:#C7B9A6> <player_name>"
 
   # Sent only on first ever join
-  welcome: "<gold>Welcome to the server for the first time, <player_name>!</gold>"
+  welcome: "<color:#FFD700>Welcome to the server for the first time, <player_name>!</color>"
   # Sent every time player joins
-  welcome-back: "<yellow>Welcome back, <player_name>!</yellow>"
+  welcome-back: "<color:#C7B9A6>Welcome back, </color><color:#FFD700><player_name></color><color:#C7B9A6>!</color>"
 
   # Broadcast example messages (referenced by key in config broadcast section)
-  broadcast-welcome: "<gold>Welcome to the server! Type /help for help.</gold>"
-  broadcast-shop: "<aqua>Check out our <white>/shop</white>!</aqua>"
+  broadcast-welcome: "<color:#FFD700>Welcome to the server!</color> <color:#C7B9A6>Type /help for help.</color>"
+  broadcast-shop: "<color:#C7B9A6>Check out our </color><color:#FFD700>/shop</color><color:#C7B9A6>!</color>"

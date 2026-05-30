@@ -267,7 +267,7 @@ join-quit:
   # Show join/quit messages at all
   enabled: true
   # true = send to actionbar instead of chat
-  use-actionbar: false
+  use-actionbar: true
   # Sent only on the very first join (lang key: "welcome")
   welcome:
     enabled: true

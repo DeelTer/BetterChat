@@ -10,15 +10,16 @@ import ru.deelter.chat.bukkit.BetterChat;
 import ru.deelter.chat.config.IconProvider;
 import ru.deelter.chat.replacer.AbstractReplacerProcessor;
 import ru.deelter.chat.replacer.ChatLink;
+import ru.deelter.chat.replacer.UrlMatcher;
 import ru.deelter.chat.utils.ChatData;
 
 import java.util.regex.Pattern;
 
 public class URLReplacerProcessor extends AbstractReplacerProcessor {
 
-	public static final Pattern URL_PATTERN = Pattern.compile(
-			"(http:\\/\\/www\\.|https:\\/\\/www\\.|http:\\/\\/|https:\\/\\/)?([a-z0-9]+([\\-.][a-z0-9]+)*\\.[a-z]{2,5})(:[0-9]{1,5})?(\\/.*?(?=$|\\s|[,.!?…]+($|\\s)))?"
-	);
+	/** @deprecated kept for API compatibility, use {@link UrlMatcher#URL_PATTERN}. */
+	@Deprecated
+	public static final Pattern URL_PATTERN = UrlMatcher.URL_PATTERN;
 
 	public URLReplacerProcessor(int priority) {
 		super(priority);
@@ -27,25 +28,43 @@ public class URLReplacerProcessor extends AbstractReplacerProcessor {
 	@Override
 	public void process(@NotNull ChatData data) {
 		TextReplacementConfig replacer = TextReplacementConfig.builder()
-				.match(URL_PATTERN)
+				.match(UrlMatcher.URL_PATTERN)
 				.replacement((result, builder) -> {
-					String url = result.group();
-					String shortenUrl = result.group(2);
-					ChatLink link = ChatLink.getLinkByUrl(shortenUrl);
+					String scheme = result.group(1);
+					String host = result.group(2);
+					String fullMatch = result.group();
+
+					// Bare domain without scheme: only link it if the TLD is a known one.
+					// Returning the pre-filled builder leaves the text untouched (no link).
+					if (scheme == null && !UrlMatcher.hasKnownTld(host)) {
+						return builder;
+					}
+
+					// Strip trailing sentence punctuation so it stays as plain text after the link.
+					int trailing = UrlMatcher.trailingPunctCount(fullMatch);
+					String url = trailing > 0 ? fullMatch.substring(0, fullMatch.length() - trailing) : fullMatch;
+					String trailingText = trailing > 0 ? fullMatch.substring(fullMatch.length() - trailing) : "";
+
+					ChatLink link = ChatLink.getLinkByUrl(host);
 					Component icon = IconProvider.getIcon("link");
-					Component hoverOpen = BetterChat.getInstance().getLang()
-							.getMessage("links-open", null);
+					Component hoverOpen = BetterChat.getInstance().getLang().getMessage("links-open", null);
 					if (hoverOpen == null) hoverOpen = Component.text("Click to open link");
-					return icon.append(Component.space())
-							.append(builder.content(shortenUrl)
-									.hoverEvent(HoverEvent.showText(Component.join(JoinConfiguration.noSeparators(),
-											Component.text(url),
-											Component.newline(),
-											Component.newline(),
-											hoverOpen)))
-									.clickEvent(ClickEvent.openUrl(url.startsWith("http") ? url : "https://" + url))
-									.color(link.color())
-									.build());
+
+					Component linkComponent = builder.content(host)
+							.hoverEvent(HoverEvent.showText(Component.join(JoinConfiguration.noSeparators(),
+									Component.text(url),
+									Component.newline(),
+									Component.newline(),
+									hoverOpen)))
+							.clickEvent(ClickEvent.openUrl(UrlMatcher.toHref(scheme, url)))
+							.color(link.color())
+							.build();
+
+					Component output = icon.append(Component.space()).append(linkComponent);
+					if (!trailingText.isEmpty()) {
+						output = output.append(Component.text(trailingText));
+					}
+					return output;
 				}).build();
 		data.setText(data.getText().replaceText(replacer));
 	}

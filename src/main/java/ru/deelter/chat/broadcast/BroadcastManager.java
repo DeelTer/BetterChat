@@ -50,7 +50,7 @@ public final class BroadcastManager {
         for (Player player : Bukkit.getOnlinePlayers()) {
             String raw = lang.getRaw(msg.getText(), player);
             if (raw.isEmpty()) continue;
-            Component text = MiniMessage.miniMessage().deserialize(raw, player, MiniPlaceholdersHook.resolver());
+            Component text = MiniMessage.miniMessage().deserialize(raw, player, MiniPlaceholdersHook.audienceResolver());
             player.sendMessage(text);
             if (msg.getSound() != null && !msg.getSound().isEmpty()) {
                 player.playSound(player.getLocation(), msg.getSound(), 1f, 1f);

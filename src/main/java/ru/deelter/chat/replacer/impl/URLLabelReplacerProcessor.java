@@ -15,7 +15,8 @@ import java.util.regex.Pattern;
 
 public class URLLabelReplacerProcessor extends AbstractReplacerProcessor {
 
-	public static final Pattern URL_LABEL_PATTERN = Pattern.compile("\\[(u|link|url|site)\\:(.+?)\\:(.+?)\\]");
+	// [link:label:url] — label has no ':' or ']'; url may contain ':' (https://) but no ']'.
+	public static final Pattern URL_LABEL_PATTERN = Pattern.compile("\\[(u|link|url|site):([^:\\]]+):([^\\]]+)\\]");
 
 	public URLLabelReplacerProcessor(int priority) {
 		super(priority);

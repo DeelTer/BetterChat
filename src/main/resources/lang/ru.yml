@@ -44,14 +44,14 @@ messages:
   lang-invalid-language: "<red>Неверный(е) код(ы) языка:</red> <color:#FFD700><code></color>"
 
   # Сообщения о входе / выходе (MiniMessage, MiniPlaceholders поддерживаются)
-  join: "<gray>[</gray><green>+</green><gray>]</gray> <green><player_name> вошёл на сервер</green>"
-  quit: "<gray>[</gray><red>-</red><gray>]</gray> <red><player_name> покинул сервер</red>"
+  join: "<color:#FFD700>+<color:#C7B9A6> <player_name>"
+  quit: "<red>-<color:#C7B9A6> <player_name>"
 
   # Отправляется только при самом первом входе
-  welcome: "<gold>Добро пожаловать на сервер впервые, <player_name>!</gold>"
+  welcome: "<color:#FFD700>Добро пожаловать на сервер впервые, <player_name>!</color>"
   # Отправляется каждый раз при входе
-  welcome-back: "<yellow>С возвращением, <player_name>!</yellow>"
+  welcome-back: "<color:#C7B9A6>С возвращением, </color><color:#FFD700><player_name></color><color:#C7B9A6>!</color>"
 
   # Примеры broadcast сообщений (ключи указываются в секции broadcast в config)
-  broadcast-welcome: "<gold>Добро пожаловать! Напишите /help для справки.</gold>"
-  broadcast-shop: "<aqua>Загляните в наш <white>/shop</white>!</aqua>"
+  broadcast-welcome: "<color:#FFD700>Добро пожаловать!</color> <color:#C7B9A6>Напишите /help для справки.</color>"
+  broadcast-shop: "<color:#C7B9A6>Загляните в наш </color><color:#FFD700>/shop</color><color:#C7B9A6>!</color>"
