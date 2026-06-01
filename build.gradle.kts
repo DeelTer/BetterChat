@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "ru.deelter"
-version = "1.3.0"
+version = "1.3.1"
 description = "Advanced chat system with bubbles, effects, and cross-server messaging"
 
 repositories {

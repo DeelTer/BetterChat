@@ -71,9 +71,25 @@ public class UrlMatcher {
     }
 
     /**
+     * Percent-encode characters that are illegal in a URI but can appear in user-typed text.
+     * Without this, ClickEvent.openUrl() passes the raw string to java.net.URI which throws
+     * IllegalArgumentException, causing Paper to kick every player receiving the message.
+     */
+    public static @NotNull String sanitizeForUri(@NotNull String url) {
+        return url.replace("|", "%7C")
+                  .replace("{", "%7B")
+                  .replace("}", "%7D")
+                  .replace("^", "%5E")
+                  .replace("`", "%60")
+                  .replace("\\", "%5C");
+    }
+
+    /**
      * Build a clickable href: keeps existing scheme, otherwise prefixes https://.
+     * Sanitizes illegal URI characters so the resulting URL never causes a kick.
      */
     public static @NotNull String toHref(String scheme, @NotNull String urlWithoutTrailing) {
-        return scheme != null ? urlWithoutTrailing : "https://" + urlWithoutTrailing;
+        String sanitized = sanitizeForUri(urlWithoutTrailing);
+        return scheme != null ? sanitized : "https://" + sanitized;
     }
 }

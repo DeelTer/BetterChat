@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import ru.deelter.chat.bukkit.BetterChat;
 import ru.deelter.chat.replacer.AbstractReplacerProcessor;
 import ru.deelter.chat.replacer.ChatLink;
+import ru.deelter.chat.replacer.UrlMatcher;
 import ru.deelter.chat.utils.ChatData;
 
 import java.util.regex.Pattern;
@@ -39,7 +40,7 @@ public class URLLabelReplacerProcessor extends AbstractReplacerProcessor {
 									Component.newline(),
 									Component.newline(),
 									hoverOpen)))
-							.clickEvent(ClickEvent.openUrl(url.startsWith("http") ? url : "https://" + url))
+							.clickEvent(ClickEvent.openUrl(UrlMatcher.sanitizeForUri(url.startsWith("http") ? url : "https://" + url)))
 							.color(link.color());
 				}).build();
 		data.setText(data.getText().replaceText(replacer));
