@@ -4,6 +4,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -30,17 +31,13 @@ public class LevelReplacerProcessor extends AbstractReplacerProcessor {
 		float progress = player.getExp();
 
 		FileConfiguration config = BetterChat.getInstance().getConfig();
-		String colorHex = config.getString("replacers.level.color", "#55FF55");
-		String fullChar = config.getString("replacers.level.full-char", "█");
-		String emptyChar = config.getString("replacers.level.empty-char", "░");
+		TextColor color = parseColor(config.getString("replacers.level.color", "#55FF55"), 0x55FF55);
+		Component fullComp = MiniMessage.miniMessage().deserialize(config.getString("replacers.level.full-char", "<color:#55FF55>█"));
+		Component emptyComp = MiniMessage.miniMessage().deserialize(config.getString("replacers.level.empty-char", "<color:#1A4D1A>█"));
 		int barSize = config.getInt("replacers.level.bar-size", 10);
 
-		TextColor color = TextColor.fromHexString(colorHex);
-		if (color == null) color = TextColor.color(0x55FF55);
-
-		TextColor finalColor = color;
-		Component bar = buildBar(progress, barSize, fullChar, emptyChar, finalColor);
-		Component hover = Component.text(String.format("%.0f%%", progress * 100), finalColor)
+		Component bar = buildBar(progress, barSize, fullComp, emptyComp);
+		Component hover = Component.text(String.format("%.0f%%", progress * 100), color)
 				.append(Component.newline())
 				.append(bar);
 
@@ -48,20 +45,24 @@ public class LevelReplacerProcessor extends AbstractReplacerProcessor {
 				.match(LEVEL_PATTERN)
 				.replacement((result, builder) -> Component.empty()
 						.append(IconProvider.getIcon("level"))
-						.append(Component.text(" " + level, finalColor))
+						.append(Component.text(" " + level, color))
 						.hoverEvent(HoverEvent.showText(hover)))
 				.build();
 		data.setText(data.getText().replaceText(replacer));
 	}
 
-	private Component buildBar(float progress, int size, String full, String empty, TextColor color) {
+	private Component buildBar(float progress, int size, Component full, Component empty) {
 		int filled = Math.round(progress * size);
 		Component bar = Component.empty();
-		TextColor emptyColor = TextColor.color(color.red() / 3, color.green() / 3, color.blue() / 3);
 		for (int i = 0; i < size; i++) {
-			bar = bar.append(Component.text(i < filled ? full : empty, i < filled ? color : emptyColor));
+			bar = bar.append(i < filled ? full : empty);
 		}
 		return bar;
+	}
+
+	private TextColor parseColor(String hex, int fallback) {
+		TextColor c = TextColor.fromHexString(hex);
+		return c != null ? c : TextColor.color(fallback);
 	}
 
 	@Override

@@ -33,9 +33,9 @@ public class BiomeReplacerProcessor extends AbstractReplacerProcessor {
 		String biomeName = formatBiomeName(biome);
 
 		FileConfiguration config = BetterChat.getInstance().getConfig();
-		String colorHex = config.getString("replacers.biome.color", "#55FFFF");
+		String colorHex = config.getString("replacers.biome.color", "#59A65E");
 		TextColor color = TextColor.fromHexString(colorHex);
-		if (color == null) color = TextColor.color(0x55FFFF);
+		if (color == null) color = TextColor.color(0x59A65E);
 
 		TextColor finalColor = color;
 		Component hoverText = Component.text(biome.getKey().toString(), TextColor.color(0x777777));

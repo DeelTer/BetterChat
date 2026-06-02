@@ -53,7 +53,7 @@ public class ItemReplacerProcessor extends AbstractReplacerProcessor {
 
 	private ItemStack resolveItem(Player player, String slotStr) {
 		PlayerInventory inv = player.getInventory();
-		if (slotStr == null) return inv.getItem(0);
+		if (slotStr == null) return inv.getItemInMainHand();
 		return switch (slotStr.toLowerCase()) {
 			case "hand", "h", "mainhand" -> inv.getItemInMainHand();
 			case "offhand", "off", "oh" -> inv.getItemInOffHand();
@@ -82,9 +82,9 @@ public class ItemReplacerProcessor extends AbstractReplacerProcessor {
 	}
 
 	private TextColor resolvePlainColor() {
-		String hex = BetterChat.getInstance().getConfig().getString("chat.item-plain-color", "#AAAAAA");
+		String hex = BetterChat.getInstance().getConfig().getString("chat.item-plain-color", "#A67959");
 		TextColor color = TextColor.fromHexString(hex);
-		return color != null ? color : TextColor.color(0xAAAAAA);
+		return color != null ? color : TextColor.color(0xA67959);
 	}
 
 	@Override

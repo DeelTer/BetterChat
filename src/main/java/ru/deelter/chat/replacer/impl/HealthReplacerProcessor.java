@@ -3,6 +3,7 @@ package ru.deelter.chat.replacer.impl;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -32,36 +33,36 @@ public class HealthReplacerProcessor extends AbstractReplacerProcessor {
 		double maxHealth = attr != null ? attr.getValue() : 20.0;
 
 		FileConfiguration config = BetterChat.getInstance().getConfig();
-		String colorHex = config.getString("replacers.health.color", "#FF5555");
-		String fullChar = config.getString("replacers.health.full-char", "❤");
-		String emptyChar = config.getString("replacers.health.empty-char", "🖤");
+		TextColor color = parseColor(config.getString("replacers.health.color", "#EA4B3C"), 0xEA4B3C);
+		Component fullComp = MiniMessage.miniMessage().deserialize(config.getString("replacers.health.full-char", "<color:#FF5555>❤"));
+		Component emptyComp = MiniMessage.miniMessage().deserialize(config.getString("replacers.health.empty-char", "<color:#552222>❤"));
 		int barSize = config.getInt("replacers.health.bar-size", 10);
 
-		TextColor color = TextColor.fromHexString(colorHex);
-		if (color == null) color = TextColor.color(0xFF5555);
-
-		TextColor finalColor = color;
 		String text = String.format("%.1f / %.1f", health, maxHealth);
-		Component bar = buildBar(health, maxHealth, barSize, fullChar, emptyChar, finalColor);
+		Component bar = buildBar(health, maxHealth, barSize, fullComp, emptyComp);
 
 		TextReplacementConfig replacer = TextReplacementConfig.builder()
 				.match(HEALTH_PATTERN)
 				.replacement((result, builder) -> Component.empty()
 						.append(IconProvider.getIcon("health"))
-						.append(Component.text(" " + text, finalColor))
+						.append(Component.text(" " + text, color))
 						.hoverEvent(net.kyori.adventure.text.event.HoverEvent.showText(bar)))
 				.build();
 		data.setText(data.getText().replaceText(replacer));
 	}
 
-	private Component buildBar(double current, double max, int size, String full, String empty, TextColor color) {
+	private Component buildBar(double current, double max, int size, Component full, Component empty) {
 		int filled = (int) Math.round(current / max * size);
 		Component bar = Component.empty();
-		TextColor emptyColor = TextColor.color(color.red() / 3, color.green() / 3, color.blue() / 3);
 		for (int i = 0; i < size; i++) {
-			bar = bar.append(Component.text(i < filled ? full : empty, i < filled ? color : emptyColor));
+			bar = bar.append(i < filled ? full : empty);
 		}
 		return bar;
+	}
+
+	private TextColor parseColor(String hex, int fallback) {
+		TextColor c = TextColor.fromHexString(hex);
+		return c != null ? c : TextColor.color(fallback);
 	}
 
 	@Override

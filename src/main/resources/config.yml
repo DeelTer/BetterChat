@@ -144,7 +144,7 @@ bubbles:
 chat:
   default-radius: 64
   # Color for items without a custom display name in [item] replacer
-  item-plain-color: "#AAAAAA"
+  item-plain-color: "#A67959"
   cave-radius: 200
   # Message format templates
   # Available placeholders: <prefix>, <suffix>, <sender>, <message>, <color1>, <color2>
@@ -312,29 +312,29 @@ broadcast:
 # -----------------------------------------------------------------
 replacers:
   health:
-    # Color of displayed health value
-    color: "#FF5555"
-    # Characters used for the hover bar
-    full-char: "❤"
-    empty-char: "🖤"
+    # Color of the inline text (18.5 / 20)
+    color: "#EA4B3C"
+    # MiniMessage strings for bar segments — full styling supported
+    full-char: "<color:#EA4B3C>❤"
+    empty-char: "<color:#552222>❤"
     # Number of bar segments
     bar-size: 10
   hunger:
-    color: "#FFAA00"
-    full-char: "🍗"
-    empty-char: "🍖"
+    color: "#FF851B"
+    full-char: "<color:#FF851B>🍖"
+    empty-char: "<color:#525252>🍖"
     bar-size: 10
+  coords:
+    color: "#C5823E"
   armor:
-    # Color of displayed armor value
     color: "#AAAAAA"
   level:
     color: "#55FF55"
-    # Characters used for the XP progress bar in hover
-    full-char: "█"
-    empty-char: "░"
+    full-char: "<color:#55FF55>█"
+    empty-char: "<color:#1A4D1A>█"
     bar-size: 10
   biome:
-    color: "#55FFFF"
+    color: "#59A65E"
 
 # -----------------------------------------------------------------
 # Link detection - services get custom colors and icons
