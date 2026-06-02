@@ -7,6 +7,7 @@ messages:
   chat-hide: "<color:#FFD700>Нажмите, чтобы показать</color>"
   chat-command: "<color:#FFD700>Нажмите, чтобы выполнить команду</color>"
   chat-say: "<color:#FFD700>Нажмите, чтобы сказать</color>"
+  chat-coords: "<color:#FFD700>Нажмите, чтобы телепортироваться</color>"
   empty-audience: "<red>Никто не услышал ваше сообщение</red>"
   anti-spam-blocked: "<red>Слишком похоже на предыдущее сообщение</red>"
   global: "ГЛОБАЛЬНЫЙ"

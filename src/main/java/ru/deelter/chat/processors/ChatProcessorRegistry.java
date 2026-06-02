@@ -66,6 +66,13 @@ public class ChatProcessorRegistry {
 		registerIfEnabled("hide", () -> new HideReplacerProcessor(99994));
 		registerIfEnabled("command", () -> new CommandReplacerProcessor(99995));
 		registerIfEnabled("chat", () -> new ChatReplacerProcessor(99996));
+		registerIfEnabled("item", () -> new ItemReplacerProcessor(99997));
+		registerIfEnabled("coords", () -> new CoordsReplacerProcessor(99998));
+		registerIfEnabled("health", () -> new HealthReplacerProcessor(99999));
+		registerIfEnabled("hunger", () -> new HungerReplacerProcessor(100000));
+		registerIfEnabled("armor", () -> new ArmorReplacerProcessor(100001));
+		registerIfEnabled("level", () -> new LevelReplacerProcessor(100002));
+		registerIfEnabled("biome", () -> new BiomeReplacerProcessor(100003));
 		registerIfEnabled("mention", () -> new MentionProcessor(200));
 	}
 

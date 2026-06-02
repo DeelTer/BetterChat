@@ -65,9 +65,16 @@ metrics:
 # -----------------------------------------------------------------
 icons:
   copy: "📋"      # Copy to clipboard button
-  hide: "👁"   # Hidden text reveal button
+  hide: "👁"      # Hidden text reveal button
   command: "⚡"    # Command execution button
   link: "🔗"       # URL link indicator
+  item: "🎒"       # Item display button
+  coords: "📍"     # Coordinates display button
+  health: "❤"      # Health display button
+  hunger: "🍗"     # Hunger display button
+  armor: "🛡"      # Armor display button
+  level: "⭐"      # Level display button
+  biome: "🌍"      # Biome display button
 
 # -----------------------------------------------------------------
 # Disable specific built-in processors by their IDs
@@ -76,7 +83,8 @@ icons:
 #   Entity effects: confusion, underwater, strength, weakness, scale,
 #                   cave, invisibility, darkness, spectate
 #   Tags & mentions: tag, mention, global_chat
-#   Replacers: url_label, url, copy, hide, command, chat
+#   Replacers: url_label, url, copy, hide, command, chat, item, coords,
+#              health, hunger, armor, level, biome
 #   Anti-spam & feedback: anti_spam, empty_audience
 #
 # Example: ["cave", "darkness"] disables cave echo and darkness effect
@@ -135,6 +143,8 @@ bubbles:
 # -----------------------------------------------------------------
 chat:
   default-radius: 64
+  # Color for items without a custom display name in [item] replacer
+  item-plain-color: "#AAAAAA"
   cave-radius: 200
   # Message format templates
   # Available placeholders: <prefix>, <suffix>, <sender>, <message>, <color1>, <color2>
@@ -296,6 +306,35 @@ broadcast:
     2:
       text: "broadcast-shop"
       sound: ""
+
+# -----------------------------------------------------------------
+# Built-in replacer settings
+# -----------------------------------------------------------------
+replacers:
+  health:
+    # Color of displayed health value
+    color: "#FF5555"
+    # Characters used for the hover bar
+    full-char: "❤"
+    empty-char: "🖤"
+    # Number of bar segments
+    bar-size: 10
+  hunger:
+    color: "#FFAA00"
+    full-char: "🍗"
+    empty-char: "🍖"
+    bar-size: 10
+  armor:
+    # Color of displayed armor value
+    color: "#AAAAAA"
+  level:
+    color: "#55FF55"
+    # Characters used for the XP progress bar in hover
+    full-char: "█"
+    empty-char: "░"
+    bar-size: 10
+  biome:
+    color: "#55FFFF"
 
 # -----------------------------------------------------------------
 # Link detection - services get custom colors and icons
