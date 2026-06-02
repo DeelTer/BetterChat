@@ -126,6 +126,13 @@ To disable, set `metrics.enabled: false` in the config.
 
 BetterChat provides a flexible API for extending chat functionality through **Processors** and **Replacers**. Both inherit from `AbstractChatProcessor` and operate on `ChatData` objects to modify messages.
 
+**📚 For practical code examples, see [EXAMPLES.md](EXAMPLES.md) which includes:**
+- URL parsing examples (detection, validation, extraction)
+- ChatData creation and manipulation
+- Custom processor implementations
+- Custom replacer patterns
+- Integration with other plugins
+
 ### Architecture Overview
 
 All chat processing happens through the `ChatProcessorRegistry`:
