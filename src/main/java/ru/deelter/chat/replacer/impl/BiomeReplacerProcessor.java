@@ -13,9 +13,7 @@ import ru.deelter.chat.config.IconProvider;
 import ru.deelter.chat.replacer.AbstractReplacerProcessor;
 import ru.deelter.chat.utils.ChatData;
 
-import java.util.Arrays;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public class BiomeReplacerProcessor extends AbstractReplacerProcessor {
 
@@ -30,7 +28,6 @@ public class BiomeReplacerProcessor extends AbstractReplacerProcessor {
 		if (!(data.getEntity() instanceof Player player)) return;
 
 		Biome biome = player.getLocation().getBlock().getBiome();
-		String biomeName = formatBiomeName(biome);
 
 		FileConfiguration config = BetterChat.getInstance().getConfig();
 		String colorHex = config.getString("replacers.biome.color", "#59A65E");
@@ -44,16 +41,10 @@ public class BiomeReplacerProcessor extends AbstractReplacerProcessor {
 				.match(BIOME_PATTERN)
 				.replacement((result, builder) -> Component.empty()
 						.append(IconProvider.getIcon("biome"))
-						.append(Component.text(" " + biomeName, finalColor))
+						.append(Component.translatable(biome.translationKey()).color(finalColor))
 						.hoverEvent(HoverEvent.showText(hoverText)))
 				.build();
 		data.setText(data.getText().replaceText(replacer));
-	}
-
-	private String formatBiomeName(Biome biome) {
-		return Arrays.stream(biome.name().split("_"))
-				.map(w -> w.charAt(0) + w.substring(1).toLowerCase())
-				.collect(Collectors.joining(" "));
 	}
 
 	@Override
