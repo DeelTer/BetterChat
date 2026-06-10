@@ -3,6 +3,7 @@ plugins {
     id("xyz.jpenilla.run-paper") version "3.0.2"
     id("com.gradleup.shadow") version "9.4.1"
     id("maven-publish")
+    id("io.freefair.lombok") version "9.5.0"
 }
 
 group = "ru.deelter"
@@ -19,8 +20,6 @@ repositories {
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT")
-    compileOnly("org.projectlombok:lombok:1.18.38")
-    annotationProcessor("org.projectlombok:lombok:1.18.38")
     compileOnly("com.velocitypowered:velocity-api:3.3.0-SNAPSHOT")
     annotationProcessor("com.velocitypowered:velocity-api:3.3.0-SNAPSHOT")
     compileOnly("io.github.miniplaceholders:miniplaceholders-api:3.2.0")
