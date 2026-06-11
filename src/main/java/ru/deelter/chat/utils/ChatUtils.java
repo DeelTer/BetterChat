@@ -1,5 +1,6 @@
 package ru.deelter.chat.utils;
 
+import io.github.miniplaceholders.api.types.RelationalAudience;
 import lombok.experimental.UtilityClass;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
@@ -73,14 +74,14 @@ public class ChatUtils {
 		Component sentinel = Component.text(GlobalChatPayload.SENTINEL);
 		Component frame = MiniMessage.miniMessage().deserialize(
 				data.getFormat() != null ? data.getFormat() : "<message>",
-				player,
+				MiniPlaceholdersHook.isEnabled() ? new RelationalAudience<>(player, player) : player,
 				Placeholder.component("prefix", data.getPrefix() != null ? data.getPrefix() : Component.empty()),
 				Placeholder.component("suffix", data.getSuffix() != null ? data.getSuffix() : Component.empty()),
 				Placeholder.component("sender", data.getName() != null ? data.getName() : Component.empty()),
 				Placeholder.component("message", sentinel),
 				Placeholder.styling("color1", data.getColor() != null ? data.getColor() : net.kyori.adventure.text.format.TextColor.color(0xffffff)),
 				Placeholder.styling("color2", data.getColor2() != null ? data.getColor2() : net.kyori.adventure.text.format.TextColor.color(0xffffff)),
-				MiniPlaceholdersHook.resolver(),
+				MiniPlaceholdersHook.audienceResolver(),
 				LangTag.resolver()
 		);
 

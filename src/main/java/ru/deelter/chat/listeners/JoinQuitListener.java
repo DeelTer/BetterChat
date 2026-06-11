@@ -1,5 +1,6 @@
 package ru.deelter.chat.listeners;
 
+import io.github.miniplaceholders.api.types.RelationalAudience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
@@ -49,7 +50,7 @@ public class JoinQuitListener implements Listener {
 
     private void sendPrivate(Player player, String raw, String sound) {
         if (raw.isEmpty()) return;
-        Component message = MiniMessage.miniMessage().deserialize(raw, player,
+        Component message = MiniMessage.miniMessage().deserialize(raw, MiniPlaceholdersHook.isEnabled() ? new RelationalAudience<>(player, player) : player,
                 playerName(player), MiniPlaceholdersHook.audienceResolver());
         player.sendMessage(message);
         if (sound != null && !sound.isEmpty()) {
@@ -63,7 +64,7 @@ public class JoinQuitListener implements Listener {
         for (Player online : Bukkit.getOnlinePlayers()) {
             String raw = lang.getRaw(langKey, online);
             if (raw.isEmpty()) continue;
-            Component message = MiniMessage.miniMessage().deserialize(raw, subject,
+            Component message = MiniMessage.miniMessage().deserialize(raw, MiniPlaceholdersHook.isEnabled() ? new RelationalAudience<>(subject, subject) : subject,
                     playerName(subject), MiniPlaceholdersHook.audienceResolver());
             if (actionBar) {
                 online.sendActionBar(message);

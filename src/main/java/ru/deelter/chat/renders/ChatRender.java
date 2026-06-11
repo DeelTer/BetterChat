@@ -1,5 +1,6 @@
 package ru.deelter.chat.renders;
 
+import io.github.miniplaceholders.api.types.RelationalAudience;
 import io.papermc.paper.chat.ChatRenderer;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.audience.Audience;
@@ -34,7 +35,7 @@ public class ChatRender implements ChatRenderer {
 
 		return MiniMessage.miniMessage().deserialize(
 				data.getFormat(),
-				player,
+				MiniPlaceholdersHook.isEnabled() ? new RelationalAudience<>(audience, player) : audience,
 				LangTag.resolver(),
 				Placeholder.component("prefix", data.getPrefix()),
 				Placeholder.component("suffix", data.getSuffix()),
@@ -42,7 +43,7 @@ public class ChatRender implements ChatRenderer {
 				Placeholder.component("message", text),
 				Placeholder.styling("color1", data.getColor()),
 				Placeholder.styling("color2", data.getColor2()),
-				MiniPlaceholdersHook.resolver()
+				MiniPlaceholdersHook.relationalResolver()
 		);
 	}
 }

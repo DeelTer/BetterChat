@@ -1,5 +1,6 @@
 package ru.deelter.chat.utils;
 
+import io.github.miniplaceholders.api.types.RelationalAudience;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import lombok.*;
 import net.kyori.adventure.audience.Audience;
@@ -174,14 +175,14 @@ public class ChatData {
 			Component rendered = MiniMessage.miniMessage()
 					.deserialize(
 							getFormat(),
-							senderAudience,
+							MiniPlaceholdersHook.isEnabled() ? new RelationalAudience<>(audience, senderAudience) : audience,
 							Placeholder.component("prefix", getPrefix()),
 							Placeholder.component("suffix", getSuffix()),
 							Placeholder.component("sender", getName()),
 							Placeholder.component("message", text),
 							Placeholder.styling("color1", getColor()),
 							Placeholder.styling("color2", getColor2()),
-							MiniPlaceholdersHook.resolver()
+							MiniPlaceholdersHook.relationalResolver()
 					);
 			audience.sendMessage(rendered);
 		});
