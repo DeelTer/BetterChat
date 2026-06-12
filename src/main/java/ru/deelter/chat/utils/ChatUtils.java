@@ -1,10 +1,8 @@
 package ru.deelter.chat.utils;
 
-import io.github.miniplaceholders.api.types.RelationalAudience;
 import lombok.experimental.UtilityClass;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
@@ -14,8 +12,6 @@ import org.jetbrains.annotations.NotNull;
 import ru.deelter.chat.bukkit.BetterChat;
 import ru.deelter.chat.language.LangTag;
 import ru.deelter.chat.language.LanguageManager;
-import ru.deelter.chat.utils.translator.OnlineTranslator;
-import ru.deelter.chat.utils.translator.TranslationLanguage;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
@@ -74,7 +70,7 @@ public class ChatUtils {
 		Component sentinel = Component.text(GlobalChatPayload.SENTINEL);
 		Component frame = MiniMessage.miniMessage().deserialize(
 				data.getFormat() != null ? data.getFormat() : "<message>",
-				MiniPlaceholdersHook.isEnabled() ? new RelationalAudience<>(player, player) : player,
+				player,
 				Placeholder.component("prefix", data.getPrefix() != null ? data.getPrefix() : Component.empty()),
 				Placeholder.component("suffix", data.getSuffix() != null ? data.getSuffix() : Component.empty()),
 				Placeholder.component("sender", data.getName() != null ? data.getName() : Component.empty()),

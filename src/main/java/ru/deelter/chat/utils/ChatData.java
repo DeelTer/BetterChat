@@ -168,14 +168,13 @@ public class ChatData {
 	}
 
 	public void send(@NotNull Collection<Audience> audiences) {
-		Audience senderAudience = entity != null ? entity : Audience.empty();
 		audiences.forEach(audience -> {
 			Component text = getText();
 			text = ChatUtils.translate(locale, audience, text);
 			Component rendered = MiniMessage.miniMessage()
 					.deserialize(
 							getFormat(),
-							MiniPlaceholdersHook.isEnabled() ? new RelationalAudience<>(audience, senderAudience) : audience,
+							MiniPlaceholdersHook.isEnabled() && this.entity != null ? new RelationalAudience<>(audience, this.entity) : audience,
 							Placeholder.component("prefix", getPrefix()),
 							Placeholder.component("suffix", getSuffix()),
 							Placeholder.component("sender", getName()),

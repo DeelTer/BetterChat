@@ -1,9 +1,7 @@
 package ru.deelter.chat.broadcast;
 
-import io.github.miniplaceholders.api.types.RelationalAudience;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
@@ -52,7 +50,7 @@ public final class BroadcastManager {
         for (Player player : Bukkit.getOnlinePlayers()) {
             String raw = lang.getRaw(msg.getText(), player);
             if (raw.isEmpty()) continue;
-            Component text = MiniMessage.miniMessage().deserialize(raw, MiniPlaceholdersHook.isEnabled() ? new RelationalAudience<>(player, player) : player, MiniPlaceholdersHook.audienceResolver());
+            Component text = MiniMessage.miniMessage().deserialize(raw, player, MiniPlaceholdersHook.audienceResolver());
             player.sendMessage(text);
             if (msg.getSound() != null && !msg.getSound().isEmpty()) {
                 player.playSound(player.getLocation(), msg.getSound(), 1f, 1f);
