@@ -1,0 +1,58 @@
+# BetterChat українська локалізація
+messages:
+  # Повідомлення плагіна
+  lang-set: "<color:#FFD700>BetterChat</color> <#C7B9A6>Мову змінено на <lang>"
+  links-open: "<color:#FFD700>Натисніть, щоб відкрити посилання</color>"
+  chat-copy: "<color:#FFD700>Натисніть, щоб скопіювати</color>"
+  chat-hide: "<color:#FFD700>Натисніть, щоб показати</color>"
+  chat-command: "<color:#FFD700>Натисніть, щоб виконати команду</color>"
+  chat-say: "<color:#FFD700>Натисніть, щоб сказати</color>"
+  chat-coords: "<color:#FFD700>Натисніть, щоб телепортуватися</color>"
+  empty-audience: "<red>Ніхто не почув вашого повідомлення</red>"
+  anti-spam-blocked: "<red>Занадто схоже на попереднє повідомлення</red>"
+  global: "ГЛОБАЛЬНИЙ"
+  trade: "ОБМІН"
+  underwater-chat: "*буль-буль*"
+
+  # Повідомлення команди мови
+  lang-player-only: "<red>Цю команду можуть використовувати лише гравці.</red>"
+  lang-help-text: |
+    <color:#FFD700>=== Команди мовної системи ===</color>
+    <color:#FFD700>/lang understand <мова1> [мова2...]</color> <#C7B9A6>- мови, які ви розумієте (без перекладу)</#C7B9A6>
+    <color:#FFD700>/lang speak <мова></color> <#C7B9A6>- мова, якою ви говорите (перевизначає мову клієнта)</#C7B9A6>
+    <color:#FFD700>/lang primary <мова|auto></color> <#C7B9A6>- основна мова для перекладу</#C7B9A6>
+    <color:#FFD700>/lang toggle</color> <#C7B9A6>- перемкнути відображення (переклад ↔ оригінал)</#C7B9A6>
+    <color:#FFD700>/lang info</color> <#C7B9A6>- показати поточні налаштування</#C7B9A6>
+    <color:#FFD700>/lang reset</color> <#C7B9A6>- скинути всі налаштування (мова клієнта)</#C7B9A6>
+
+  lang-set-success: "<color:#FFD700>✓ Встановлено мови:</color> <#C7B9A6><langs></#C7B9A6>"
+  lang-primary-success: "<color:#FFD700>✓ Основну мову перекладу встановлено:</color> <#C7B9A6><lang></#C7B9A6>"
+  lang-speak-success: "<color:#FFD700>✓ Тепер ви говорите мовою:</color> <#C7B9A6><lang></#C7B9A6>"
+  lang-toggle-on: "<color:#FFD700>✓ Режим:</color> <#C7B9A6>ОРИГІНАЛ (переклад при наведенні)</#C7B9A6>"
+  lang-toggle-off: "<color:#FFD700>✓ Режим:</color> <#C7B9A6>ПЕРЕКЛАД (оригінал при наведенні)</#C7B9A6>"
+  lang-info-known: "<color:#FFD700>Відомі мови:</color> <#C7B9A6><langs></#C7B9A6>"
+  lang-info-primary: "<color:#FFD700>Основний переклад:</color> <#C7B9A6><primary></#C7B9A6>"
+  lang-info-toggle: "<color:#FFD700>Режим відображення:</color> <#C7B9A6><mode></#C7B9A6>"
+  lang-reset-success: "<color:#FFD700>✓ Налаштування мови скинуто (використовується мова клієнта).</color>"
+
+  lang-understand-reset: "<color:#FFD700>✓ Список відомих мов скинуто (усі повідомлення перекладатимуться на primary)</color>"
+  lang-speak-reset: "<color:#FFD700>✓ Тепер ви говорите мовою клієнта (налаштування speak скинуто)</color>"
+  lang-primary-reset: "<color:#FFD700>✓ Основну мову перекладу скинуто в auto (перша з known або мова клієнта)</color>"
+
+  lang-usage-set: "<red>Використання: /lang understand <мова1> [мова2...]</red>"
+  lang-usage-primary: "<red>Використання: /lang primary <мова|auto></red>"
+  lang-usage-speak: "<red>Використання: /lang speak <мова></red>"
+  lang-invalid-language: "<red>Невірний(і) код(и) мови:</red> <color:#FFD700><code></color>"
+
+  # Повідомлення про вхід / вихід (MiniMessage, MiniPlaceholders підтримуються)
+  join: "<color:#FFD700>+<color:#C7B9A6> <player_name>"
+  quit: "<red>-<color:#C7B9A6> <player_name>"
+
+  # Надсилається тільки при першому вході
+  welcome: "<color:#FFD700>Ласкаво просимо на сервер вперше, <player_name>!</color>"
+  # Надсилається кожного разу при вході
+  welcome-back: "<color:#C7B9A6>З поверненням, </color><color:#FFD700><player_name></color><color:#C7B9A6>!</color>"
+
+  # Приклади broadcast повідомлень (ключі вказуються в секції broadcast в config)
+  broadcast-welcome: "<color:#FFD700>Ласкаво просимо!</color> <color:#C7B9A6>Напишіть /help для довідки.</color>"
+  broadcast-shop: "<color:#C7B9A6>Загляньте в наш </color><color:#FFD700>/shop</color><color:#C7B9A6>!</color>"

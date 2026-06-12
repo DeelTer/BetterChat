@@ -43,7 +43,7 @@ public class Lang {
 			langFolder.mkdirs();
 		}
 
-		String[] resourceFiles = {"lang/en.yml", "lang/ru.yml"};
+		String[] resourceFiles = {"lang/en.yml", "lang/ru.yml", "lang/uk.yml"};
 		for (String resourcePath : resourceFiles) {
 			File target = new File(plugin.getDataFolder(), resourcePath);
 			if (!target.exists()) {
